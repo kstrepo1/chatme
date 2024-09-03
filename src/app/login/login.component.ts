@@ -16,6 +16,8 @@ export class LoginComponent {
 
   emailaddress:string ="super@super.com";
   password:string= "";
+  error:string="";
+
   constructor (private authcheck:AuthcheckService,
     private router:Router,
     @Inject(PLATFORM_ID) private platformID: object
@@ -25,14 +27,18 @@ export class LoginComponent {
   //On init angualr checks if there is a local storage credential 
   ngOnInit(){
     if(isPlatformBrowser(this.platformID)){
-      let credc:any = localStorage.getItem("credentials");
-      let credcheck:any = JSON.parse(credc);
-      console.log(credcheck);
-      if(credcheck.valid){
-        console.log("valid")
-        this.router.navigate(['home']);
-      } else {
-        this.router.navigate(['login'])
+      try {
+        let credc:any = localStorage.getItem("credentials");
+        let credcheck:any = JSON.parse(credc);
+        console.log(credcheck);
+        if(credcheck.valid){
+          console.log("valid")
+          this.router.navigate(['home']);
+        } else {
+          this.router.navigate(['login'])
+        }
+      } catch {
+        console.log("No Authentication Token Detected");
       }
     }
   }
@@ -45,6 +51,8 @@ export class LoginComponent {
       let creds = JSON.stringify(signin)
       localStorage.setItem("credentials", creds);
       window.location.replace("/");
+    } else {
+      this.error = "Password Error, Please Try Again."
     }
 
   }

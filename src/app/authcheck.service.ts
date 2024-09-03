@@ -8,7 +8,7 @@ export class AuthcheckService {
   constructor() { }
 
   authedusers = [{
-      username: "super",
+      username: "Super",
       email : "super@super.com",
       password: "123",
       id: "101",
@@ -40,11 +40,13 @@ export class AuthcheckService {
       username: "Jim",
       email : "jim@jim.com",
       password: "123",
-      id: "104",
+      id: "105",
       roles: ["ChatUser"],
       groups: []
     }
   ]
+
+  //Check Signin
 
   credCheck(email:string, password:string){
     var user = {email: email, username: "", password: password, valid: false, id: "0", roles: [""], groups:[""]};
@@ -64,4 +66,38 @@ export class AuthcheckService {
     user.password = "";
     return user
   }
+
+  //This returns a list of users
+  userlist(){
+    let userlist =[]
+    for(let i=0; i<this.authedusers.length; i++){
+      let user = {
+        username: this.authedusers[i].username,
+        email : this.authedusers[i].email,
+        id: this.authedusers[i].id,
+        roles: this.authedusers[i].roles,
+        groups: this.authedusers[i].groups
+      }
+      userlist.push(user)
+    }
+    return userlist
+  }
+
+//This returns a specific users information
+  getUser(id:string){
+    let user:any;
+    for(let i=0; i<this.authedusers.length; i++){
+      if(id == this.authedusers[i].id){
+        user = {
+          email: this.authedusers[i].email, 
+          username: this.authedusers[i].username,
+          valid: true, 
+          id: this.authedusers[i].id, 
+          roles: this.authedusers[i].roles, 
+          groups: this.authedusers[i].groups}
+        return user
+      } 
+    }
+  }
+  
 }

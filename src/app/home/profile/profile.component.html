@@ -1,0 +1,27 @@
+<div id="profile">
+    <h1>Profile Information</h1>
+<form>
+    <label for="email">Email: </label><br>
+    <input type="text" id="email" [(ngModel)]="email" name="email"><br>
+    <label for="username">Username: </label><br>
+    <input type="text" id="username" [(ngModel)]="username" name="username"><br>
+    <label for="password">Password: </label><br>
+    <input type="text" id="email" placeholder="Update Password?"><br>
+</form><br>
+<button>Update</button>
+<br><br>
+
+<h5>Roles: </h5>
+<br>
+@for(role of roles; track roles.role; ){
+    {{role}} <br>
+}
+
+<br>
+<h5>Groups: </h5>
+
+@for(group of groups; track groups.group ){
+    {{group}} <br>
+}
+
+</div>

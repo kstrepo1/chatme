@@ -4,7 +4,9 @@ import { LoginComponent } from './login/login.component';
 import { ChannelsComponent } from './home/channels/channels.component';
 import { GroupsComponent } from './home/groups/groups.component';
 import { UsersComponent } from './home/users/users.component';
+import { UserComponent } from './home/users/user/user.component';
 import { ChatComponent } from './home/chat/chat.component';
+import { ProfileComponent } from './home/profile/profile.component';
 
 
 export const routes: Routes = [
@@ -13,6 +15,7 @@ export const routes: Routes = [
     {path: 'channels', component:ChannelsComponent},
     {path: 'groups', component:GroupsComponent},
     {path: 'users', component:UsersComponent},
+    {path: 'user/:id', component:UserComponent},
     {path: 'chat', component:ChatComponent},
-
+    {path: 'profile', component:ProfileComponent},
 ];

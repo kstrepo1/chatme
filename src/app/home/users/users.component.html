@@ -1,1 +1,19 @@
-<p>users works!</p>
+<div id="userlist">
+    <h1>User List:</h1>
+
+    <div class="container text-left">
+        @for (user of userlist; track user.id;){
+            <div class="row">
+                <div class="col">
+                    {{user.username}}
+                </div>
+                <div class="col"> 
+
+                </div>
+                <div class="col">
+                    <a href="/user/{{user.id}}">View</a>
+                </div>
+            </div>
+        }  
+    </div>
+</div>
