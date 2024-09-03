@@ -1,1 +1,19 @@
-<p>groups works!</p>
+@if(canCreateGroup){
+    <div id="createNewGroup">
+        <div >
+            <button type="button" class="btn btn-primary" (click)="createNewGroup();">Create New Group</button>
+        </div>
+    </div>
+}
+
+@for (group of grouplist; track group.groupname){
+    <div id="group">
+        <h2>{{group.groupname}}</h2>
+        <div id="channels">Channels: {{group.channels}}</div>
+        <a href="/group/{{group.id}}">View</a> 
+        @if(!group.joined){
+            <br>
+            <a href="#">Join</a> 
+        }
+    </div>   
+}

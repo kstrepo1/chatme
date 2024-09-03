@@ -1,6 +1,6 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { AuthcheckService } from '../../authcheck.service';
+import { isPlatformBrowser } from '@angular/common';
+import { AuthcheckService } from '../../services/authcheck.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,7 +18,6 @@ export class UsersComponent {
   ){}
 
   userlist:any;
-
   curentuserrole:any;
 
   ngOnInit(){

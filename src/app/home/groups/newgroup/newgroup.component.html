@@ -1,0 +1,25 @@
+<div id="newGroup">
+    <h3>New Group</h3>
+
+    <form>
+        <label for="groupName">Group Name: </label><br>
+        <input type="text" id="groupName" name="groupName" [(ngModel)]="groupName">
+
+    </form>
+    <br>Channels:
+    <ul class="list-group">
+        @for(channels of newchannels; track channels){
+            <li class="list-group-item">{{channels}}</li>
+        }
+    </ul>
+
+    <br>
+    <form>
+        <input type="text" id="newchannel" name="newchannel" [(ngModel)]="newchannel"><br><br>
+        <button type="button" class="btn btn-info" (click)="addChanel()">Add Chanel</button>
+    </form>
+    <br>
+
+<br>
+    <button type="button" class="btn btn-success" (click)="addGroup()">Create Group</button>
+</div>

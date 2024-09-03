@@ -1,7 +1,7 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms'
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { AuthcheckService } from '../authcheck.service';
+import { AuthcheckService } from '../services/authcheck.service';
 import { Router } from '@angular/router';
 
 

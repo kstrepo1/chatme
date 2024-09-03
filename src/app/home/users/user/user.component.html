@@ -4,6 +4,20 @@
     <h3>Email: {{userinfo.email}}</h3><br>
     <h5>Roles:</h5>
     {{userinfo.roles}} <br><br>
+
+    @if(promoteusersuperadmin){
+        <button>Promote to SuperAdmin</button>
+        <br><br>
+    }
+
+    @if(promoteusergroupadmin){
+        <button>Promote to Group Admin</button>
+        <br>
+    }
+
+
+
     <h5>Groups: </h5>
+    {{usergroups}}
 
 </div>

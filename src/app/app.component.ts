@@ -28,13 +28,13 @@ export class AppComponent {
         let credcheck:any = JSON.parse(credc);
         console.log(credcheck);
         if(credcheck.valid){
-          console.log("valid")
+          //console.log("valid")
           this.validuser = true
           this.credentials = credcheck
           this.username = credcheck.username
         }
       } catch {
-        console.log('notvalid');
+        //console.log('notvalid');
         this.validuser = false
         this.router.navigate(['login']);
       }

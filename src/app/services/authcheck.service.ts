@@ -13,28 +13,28 @@ export class AuthcheckService {
       password: "123",
       id: "101",
       roles: ["SuperAdmin", "GroupAdmin", "ChatUser"],
-      groups: []
+      groups: ["0", "1", "2"]
     },  {
       username: "Bob",
       email : "bob@bob.com",
       password: "123",
       id: "102",
       roles: ["GroupAdmin", "ChatUser"],
-      groups: []
+      groups: ["1", "2"]
     },  {
       username: "James",
       email : "james@james.com",
       password: "123",
       id: "103",
       roles: ["GroupAdmin", "ChatUser"],
-      groups: []
+      groups: ["1"]
     }, {
       username: "Sarah",
       email : "sarah@sarah.com",
       password: "123",
       id: "104",
       roles: ["ChatUser"],
-      groups: []
+      groups: ["1", "2"]
     }, 
     {
       username: "Jim",
@@ -42,7 +42,7 @@ export class AuthcheckService {
       password: "123",
       id: "105",
       roles: ["ChatUser"],
-      groups: []
+      groups: ["1", "2", "3"]
     }
   ]
 
