@@ -1,7 +1,7 @@
 # Chatme
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.1.
-The project is part one of a 3813ICT Assignment. 
+The project is part one of a 3813ICT Assignment. This project will be created using a MEAN Stack. 
 
 ## Github Organisation
 Github has been used as a tool to track creation and modification of code. Commits have been used for major changes and implementations of the software. 

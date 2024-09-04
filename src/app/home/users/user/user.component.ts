@@ -22,6 +22,7 @@ export class UserComponent {
   currentuserrole:any;
   promoteusersuperadmin:any = false;
   promoteusergroupadmin:any = false;
+  deleteuseravailable:boolean = false;
   usergroups:any;
 
   //Constructor uses activated route to determine which user to load. 
@@ -61,6 +62,7 @@ export class UserComponent {
     for(let i=0; i<this.currentuserrole.length; i++){
       if(this.currentuserrole[i]=="SuperAdmin"){
         this.promoteusersuperadmin = true;
+        this.deleteuseravailable = true;
       }
       if(this.currentuserrole[i]=="GroupAdmin"){
         this.promoteusergroupadmin = true;

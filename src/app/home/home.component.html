@@ -1,2 +1,11 @@
-<div> INSERT Groups </div>
-  
+<div id="homepage">
+    @for (group of usersgrouplist; track group.groupname){
+        <div id="group">
+            <h2>{{group.groupname}}</h2>
+            <div id="channels">Channels: {{group.channels}}</div>
+            <br>
+            <button type="button" class="btn btn-primary" (click)="groupView(group.id)">View</button>
+            &nbsp;
+        </div>   
+    }
+</div>
