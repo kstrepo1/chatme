@@ -6,8 +6,8 @@ import { GroupComponent } from './home/groups/group/group.component';
 import { NewgroupComponent } from './home/groups/newgroup/newgroup.component';
 import { UsersComponent } from './home/users/users.component';
 import { UserComponent } from './home/users/user/user.component';
-import { ChatComponent } from './home/chat/chat.component';
 import { ProfileComponent } from './home/profile/profile.component';
+import { RequestsComponent } from './requests/requests.component';
 
 
 export const routes: Routes = [
@@ -18,6 +18,6 @@ export const routes: Routes = [
     {path: 'newgroup', component:NewgroupComponent},
     {path: 'users', component:UsersComponent},
     {path: 'user/:id', component:UserComponent},
-    {path: 'chat', component:ChatComponent},
     {path: 'profile', component:ProfileComponent},
+    {path: 'requests', component:RequestsComponent}
 ];

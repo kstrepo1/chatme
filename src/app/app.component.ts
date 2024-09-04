@@ -16,6 +16,8 @@ export class AppComponent {
   credentials:any;
   username:string = "";
   validuser:boolean = false;
+  canSeeRequests:boolean = false;
+  currentuserrole:any;
 
   constructor (
     private router:Router,
@@ -28,15 +30,23 @@ export class AppComponent {
         let credcheck:any = JSON.parse(credc);
         console.log(credcheck);
         if(credcheck.valid){
-          //console.log("valid")
           this.validuser = true
           this.credentials = credcheck
           this.username = credcheck.username
+          this.currentuserrole = credcheck.roles;
         }
       } catch {
-        //console.log('notvalid');
         this.validuser = false
         this.router.navigate(['login']);
+      }
+    }else {
+      this.currentuserrole = [];
+    }
+  
+
+    for(let i=0; i<this.currentuserrole.length; i++){
+      if(this.currentuserrole[i]=="SuperAdmin"){
+        this.canSeeRequests = true;
       }
     }
   }

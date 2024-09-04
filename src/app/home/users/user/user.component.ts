@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { AuthcheckService } from '../../../services/authcheck.service';
-import { GroupService } from '../../../services/group.service';
+import { AuthcheckService } from '../../services/authcheck.service';
+import { GroupService } from '../../services/group.service';
 
 @Component({
   selector: 'app-user',

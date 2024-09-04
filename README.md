@@ -13,8 +13,21 @@ Two core objects run this first phase of the assignement. These are the "authedu
 Angular has been used as the front end software library. Angular brings web-apps together using components, services and routes. 
 You will see the layout of the app, its components and services under `./src/app` 
 
+A range of routes have been used to configure navigation around the web app. The below were used:
+| Route | Description |
+| ------- | ------------ |
+| 'login' | This oage is shown when a user first accessed the site. It requires a login and passowrd. |
+| 'home'| This route shows the homepage and will be viewed after successful login |
+| 'groups'| This route takes the user to the groups page where a list of groups are shown. Some may have access provided, others the user can  request to join |
+| 'group/:id' | This route is an activated route. This means that the group being shown will display dynamically depending on group ID requested |
+| 'newgroup' | This route allows the creation of a new group. |
+| 'users' | This route shows a list of users. |
+| 'user/:id' | This route uses an activated route to dynamically show a user page depending on ID requested |
+| 'profile' | This route shows the users current profile and information. |
 
+The relevant compnents were used based on the routes. 
 
+A User service (authcheck) and a group service were used to closely manage the relevant requests. These will be able to be swapped to the relevant post requests to a proxy server. 
 
 
 

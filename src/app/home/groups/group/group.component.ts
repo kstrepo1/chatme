@@ -3,8 +3,8 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { GroupService } from '../../../services/group.service';
-import { AuthcheckService } from '../../../services/authcheck.service';
+import { GroupService } from '../../services/group.service';
+import { AuthcheckService } from '../../services/authcheck.service';
 
 @Component({
   selector: 'app-group',
