@@ -99,5 +99,18 @@ export class AuthcheckService {
       } 
     }
   }
+
+  getGroupUserList(groupid:any){
+    let fulluserlist = this.userlist()
+    let matchedusers = [];
+    for(let a=0; a<fulluserlist.length; a++){
+      for(let b=0; b<fulluserlist[a].groups.length;b++){
+        if(fulluserlist[a].groups[b]==groupid){
+          matchedusers.push(fulluserlist[a]);
+        }
+      }
+    }
+    return matchedusers
+  }
   
 }

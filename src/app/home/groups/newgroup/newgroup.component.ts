@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GroupService } from '../../../services/group.service';
 import { Router } from '@angular/router';
@@ -15,12 +16,28 @@ export class NewgroupComponent {
   newchannels:any[] = [];
   newchannel:any = "";
   groupName:string = "";
+  currentUserID:any;
 
   groupAdminAccess:any = [];
 
   constructor(private group:GroupService,
-    private router:Router
+    private router:Router,
+    @Inject(PLATFORM_ID) private platformID: object
   ){}
+
+  ngOnInit(){
+    if(isPlatformBrowser(this.platformID)){
+      try{
+        let credc:any = localStorage.getItem("credentials");
+        let credcheck:any = JSON.parse(credc);
+        if(credcheck.valid){
+          this.currentUserID = credcheck.id;
+        }
+      } catch {
+        console.log('error on user component')
+      }
+    }
+  }
 
   addChanel(){
     this.newchannels.push(this.newchannel);
@@ -28,7 +45,7 @@ export class NewgroupComponent {
   }
 
   addGroup(){
-    this.group.newGroup(this.groupName, this.newchannels, this.groupAdminAccess);
+    this.group.newGroup(this.groupName, this.newchannels, this.groupAdminAccess, this.currentUserID);
     this.router.navigate(['groups']);
   }
 

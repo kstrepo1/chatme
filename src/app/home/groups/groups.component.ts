@@ -24,7 +24,6 @@ export class GroupsComponent {
 
   ngOnInit(){
     this.grouplist = this.groups.getGroupList();
-    console.log(this.grouplist);
 
     if(isPlatformBrowser(this.platformID)){
       try{
@@ -50,7 +49,6 @@ export class GroupsComponent {
       for(let b=0; b<this.currentusergroups.length;b++){
         
         if(this.grouplist[a].id == this.currentusergroups[b]){
-          console.log("match");
           authgroupcheck.push({id:a, joined:true, groupname: this.grouplist[a].groupname, channels: this.grouplist[a].channels , groupAdminAccess: this.grouplist[a].groupAdminAccess})
           matched = true
         } 
@@ -62,7 +60,6 @@ export class GroupsComponent {
     this.grouplist = authgroupcheck
 
     //Checks to see if current user can create groups
-    console.log(this.curentuserrole);
     for(let a =0; a<this.curentuserrole.length; a++){
       if(this.curentuserrole[a]=="GroupAdmin" || this.curentuserrole[a]=="SuperAdmin"){
         this.canCreateGroup = true;
@@ -72,6 +69,10 @@ export class GroupsComponent {
 
   createNewGroup(){
     this.router.navigate(['newgroup']);
+  }
+
+  groupView(groupid:any){
+    this.router.navigate(['group/'+groupid]);
   }
 
 

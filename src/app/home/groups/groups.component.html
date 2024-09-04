@@ -1,19 +1,21 @@
-@if(canCreateGroup){
-    <div id="createNewGroup">
-        <div >
-            <button type="button" class="btn btn-primary" (click)="createNewGroup();">Create New Group</button>
-        </div>
-    </div>
-}
+
 
 @for (group of grouplist; track group.groupname){
     <div id="group">
         <h2>{{group.groupname}}</h2>
         <div id="channels">Channels: {{group.channels}}</div>
-        <a href="/group/{{group.id}}">View</a> 
+        <br>
+        <button type="button" class="btn btn-primary btn-sm" (click)="groupView(group.id)">View</button>
+        &nbsp;
         @if(!group.joined){
-            <br>
-            <a href="#">Join</a> 
+            <button type="button" class="btn btn-info btn-sm">Join</button>
         }
     </div>   
+}
+@if(canCreateGroup){
+    <div id="createNewGroup">
+        <div >
+            <button type="button" class="btn btn-success btn-sm" (click)="createNewGroup();">Create New Group</button>
+        </div>
+    </div>
 }

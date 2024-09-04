@@ -50,7 +50,7 @@ export class LoginComponent {
     if(signin.valid){
       let creds = JSON.stringify(signin)
       localStorage.setItem("credentials", creds);
-      window.location.replace("/");
+      window.location.replace("/home");
     } else {
       this.error = "Password Error, Please Try Again."
     }

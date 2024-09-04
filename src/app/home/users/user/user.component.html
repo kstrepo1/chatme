@@ -1,6 +1,6 @@
 <div id="user">
-    <h2>ID: {{userinfo.id}}</h2><br>
-    <h2>Name: {{userinfo.username}}</h2><br>
+    <h1>User Info</h1><br>
+    <h3>Name: {{userinfo.username}}</h3><br>
     <h3>Email: {{userinfo.email}}</h3><br>
     <h5>Roles:</h5>
     {{userinfo.roles}} <br><br>
@@ -16,8 +16,9 @@
     }
 
 
-
     <h5>Groups: </h5>
-    {{usergroups}}
+    @for (usergroup of usergroups; track usergroup){
+        {{usergroup}}<br>
+    }
 
 </div>

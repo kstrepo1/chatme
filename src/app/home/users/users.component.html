@@ -1,19 +1,32 @@
 <div id="userlist">
-    <h1>User List:</h1>
+    <h1>Users</h1>
 
     <div class="container text-left">
-        @for (user of userlist; track user.id;){
-            <div class="row">
-                <div class="col">
-                    {{user.username}}
-                </div>
-                <div class="col"> 
 
-                </div>
-                <div class="col">
-                    <a href="/user/{{user.id}}">View</a>
-                </div>
+        <div class="list-group">
+            @for (user of userlist; track user.id;){
+            <a (click)="navUser(user.id)" class="list-group-item list-group-item-action">{{user.username}}</a>
+            }
+          </div>
+    </div>
+    <br>
+    <div>
+    @if(!addUserActive){
+        <button type="button" class="btn btn-outline-primary" (click)="addNewUserToggle()">Add New</button>
+    } @else{
+        <b>Add New User</b><br><br>
+        <form>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username">
+              </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              <div id="emailHelp" class="form-text">We'll try to not share your email with anyone else.</div>
             </div>
-        }  
+            <button type="submit" class="btn btn-primary">Create</button>
+          </form>
+    }
     </div>
 </div>

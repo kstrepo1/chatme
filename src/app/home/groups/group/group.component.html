@@ -1,3 +1,76 @@
 <div id="groupdiv">
-<h2>{{groupName}}</h2>
+        
+    <h2>{{groupName}}</h2>
+    <button type="button" class="btn btn-info btn-sm" (click)="navgroups()">All Groups</button> &nbsp;
+@if(!currentUserJoined){
+    <button type="button" class="btn btn-info btn-sm" (click)="navgroups()">Join</button> &nbsp;
+} 
+
+    @if(!options){
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="toggleOptions()">Options</button>
+    } @else {
+
+        <button type="button" class="btn btn-secondary btn-sm" (click)="toggleOptions()">Options</button>&nbsp;
+        @if(currentUserJoined){
+            <button type="button" class="btn btn-outline-danger btn-sm" >Leave</button> &nbsp;
+        } 
+        @if(canaddchanel){
+            <button type="button" class="btn btn-warning btn-sm">Edit</button>&nbsp;
+            <button type="button" class="btn btn-danger btn-sm">Delete</button>
+        }
+    }
+
+    <br><br>
+
 </div>
+
+@if(currentUserJoined){
+<div id="channels" class="row">
+    <div id="channeldiv" class="col-3">
+        <h4>Channels &nbsp; </h4>
+            <ul class="list-group" id="channelcontainer">
+                @for(channel of groupChannels; track channel){
+                    @if(channel==channelSelected){
+                    <li class="list-group-item active" aria-current="true" (click)="selectedChannel(channel)">{{channel}}</li>
+                    } @else {
+                        <li class="list-group-item" (click)="selectedChannel(channel)">{{channel}}</li>
+                    }
+                }
+            </ul>
+            <br>
+
+        @if(canaddchanel){
+            @if(!addingChannel){
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="addChanel(0)">Add New Channel</button>
+            } @else {
+                <input type="text" id="newchannel" name="newchannel" placeholder="New Channel Name" [(ngModel)]="newChannelName">
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="addChanel(newChannelName)">Add</button>
+            }
+        }
+
+        <br><br>
+        <h4>Users &nbsp; </h4>
+        <ul class="list-group list-group-flush">
+            @for(user of groupMembers; track user.username){
+                <li class="list-group-item">{{user.username}}</li>
+            }
+
+          </ul>
+    </div>
+
+    <div id="chatdiv"class="col-9">
+        <h4>{{channelSelected}} Chat &nbsp; </h4>
+
+        <div class="row">
+            <div class="input-group" id="chatbox">
+                <textarea class="form-control" aria-label="With textarea"></textarea>
+                <button class="btn btn-outline-primary" type="button" id="button-addon2">Send</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+} @else {
+    <div id="joinMessage">You will be able to see more once joined. </div>
+}

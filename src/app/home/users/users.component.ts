@@ -19,6 +19,7 @@ export class UsersComponent {
 
   userlist:any;
   curentuserrole:any;
+  addUserActive:Boolean = false;
 
   ngOnInit(){
     this.userlist = this.authcheck.userlist();
@@ -33,6 +34,20 @@ export class UsersComponent {
       } catch {
         console.log('error on user component')
       }
+    }
+
+  }
+
+  navUser(id:any){
+    this.router.navigate(['user/'+id]);
+
+  }
+
+  addNewUserToggle(){
+    if(!this.addUserActive){
+      this.addUserActive = true;
+    } else { 
+      this.addUserActive = false;
     }
 
   }
