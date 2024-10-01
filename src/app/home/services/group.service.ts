@@ -11,7 +11,7 @@ export class GroupService {
   grouplist = groups.grouplist;
 
   getGroupList(){
-    console.log(this.grouplist);
+    //console.log(this.grouplist);
     return this.grouplist
   }
 

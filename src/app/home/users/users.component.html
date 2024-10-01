@@ -4,8 +4,8 @@
     <div class="container text-left">
 
         <div class="list-group">
-            @for (user of userlist; track user.id;){
-            <a (click)="navUser(user.id)" class="list-group-item list-group-item-action">{{user.username}}</a>
+            @for (user of userlist; track user._id;){
+            <a (click)="navUser(user._id)" class="list-group-item list-group-item-action">{{user.username}}</a>
             }
           </div>
     </div>
@@ -18,14 +18,14 @@
         <form>
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username">
+                <input type="text" class="form-control" id="username" [(ngModel)]="newUserUsername" name="newUserUsername">
               </div>
             <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              <label for="addEmail" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="addEmail" aria-describedby="emailHelp" [(ngModel)]="newUserEmail" name="newUserEmail">
               <div id="emailHelp" class="form-text">We'll try to not share your email with anyone else.</div>
             </div>
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary" (click)="addNewUser()">Create</button>
           </form>
     }
     </div>

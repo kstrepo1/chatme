@@ -1,40 +1,48 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { AuthcheckService } from '../services/authcheck.service';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss'
 })
 export class UsersComponent {
 
-  constructor(private authcheck:AuthcheckService,
+  constructor(
     private router:Router,
-    @Inject(PLATFORM_ID) private platformID: object
+    @Inject(PLATFORM_ID) private platformID: object,
+    private user:UserService
   ){}
 
   userlist:any;
   curentuserrole:any;
   addUserActive:Boolean = false;
+  newUserEmail:any;
+  newUserUsername:any;
+  credcheck:any;
 
   ngOnInit(){
-    this.userlist = this.authcheck.userlist();
-
     if(isPlatformBrowser(this.platformID)){
       try{
         let credc:any = localStorage.getItem("credentials");
-        let credcheck:any = JSON.parse(credc);
-        if(credcheck.valid){
-          this.curentuserrole = credcheck.roles;
+        this.credcheck = JSON.parse(credc);
+        if(this.credcheck.valid){
+          this.curentuserrole = this.credcheck.roles;
         }
       } catch {
         console.log('error on user component')
       }
     }
+
+    this.user.getUserList(this.credcheck).subscribe( (data)=>{
+      this.userlist = data;
+      console.log(this.userlist)
+    });
 
   }
 
@@ -50,6 +58,22 @@ export class UsersComponent {
       this.addUserActive = false;
     }
 
+  }
+
+  async addNewUser(){
+    this.user.addNewUser({"email": this.newUserEmail, "username": this.newUserUsername}).subscribe ( (data)=>{
+      console.log(data);
+      try{
+        this.userlist.push(data[0]);
+        this.addUserActive = false;
+        this.newUserEmail = "";
+        this.newUserUsername = "";
+
+      }
+      catch{
+        console.log('add new user error')
+      }
+    })
   }
 
 }

@@ -14,15 +14,24 @@ app.use(express.json());
 
 //DB Name
 const dbName='chatme';
+//const dbCollection='products'
 
 
 async function main() {
     await client.connect();
     console.log('Connected Successfully');
     const db = client.db(dbName);
-    const collection = db.collection('products');
+    //const collection = db.collection(dbCollection);
+    const users = require('./App/user_operations');
 
-    //require('./App/read')(client, app);
+    //Data Seeding
+    seedUsers = async () => {await users.seed(client, dbName)};
+    await seedUsers();
+    
+    //Routes
+    app.post('/api/adduser', (req, res) => users.insert(req, res, client, dbName));
+    app.post('/api/getUserList', (req, res) => users.userList(req, res, client, dbName));
+    app.post('/api/getUser', (req, res) => users.userLookup(req, res, client, dbName));
 
     require('./App/listen')(app);
 }

@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { AuthcheckService } from '../../services/authcheck.service';
 import { GroupService } from '../../services/group.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user',
@@ -31,13 +32,17 @@ export class UserComponent {
     private authcheck:AuthcheckService,
     private router:Router,
     private group:GroupService,
-    @Inject(PLATFORM_ID) private platformID: object
+    @Inject(PLATFORM_ID) private platformID: object,
+    private user:UserService
   ){
     this.activatedRoute.params.subscribe(params => this.userid = params["id"])
   }
 
   ngOnInit(){
-    this.userinfo = this.authcheck.getUser(this.userid);
+    this.user.getUserInfo(1,this.userid).subscribe( (data)=>{
+    this.userinfo = data[0]
+//    console.log(data);
+     })
     console.log(this.userinfo);
 
     if(isPlatformBrowser(this.platformID)){
