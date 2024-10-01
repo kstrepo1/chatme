@@ -20,4 +20,12 @@ export class UserService {
     return this.http.post<any>('http://localhost:3000/api/getUser', {currentUserID: currentUser, searchUserID: userID})
   }
 
+  login(email:any, password:any){
+    return this.http.post<any>('http://localhost:3000/api/login', {email: email, password: password})
+  }
+
+  sessionValid(sessionId:any){
+    return this.http.post<any>('http://localhost:3000/api/session', {sessionId: sessionId})
+  }
+
 }

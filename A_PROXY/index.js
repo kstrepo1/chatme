@@ -25,13 +25,24 @@ async function main() {
     const users = require('./App/user_operations');
 
     //Data Seeding
-    seedUsers = async () => {await users.seed(client, dbName)};
-    await seedUsers();
+    // seedUsers = async () => {await users.seed(client, dbName)};
+    // await seedUsers();
     
     //Routes
     app.post('/api/adduser', (req, res) => users.insert(req, res, client, dbName));
     app.post('/api/getUserList', (req, res) => users.userList(req, res, client, dbName));
     app.post('/api/getUser', (req, res) => users.userLookup(req, res, client, dbName));
+
+//TODO
+    //Update
+    //Delete
+
+    //Sign In
+    app.post('/api/login', (req, res) => users.signIn(req, res, client, dbName));
+    app.post('/api/session', (req, res) => users.sessionInfo(req, res, client, dbName));
+
+    //Authenticate
+    //Sign out
 
     require('./App/listen')(app);
 }

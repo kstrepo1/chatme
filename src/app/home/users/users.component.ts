@@ -16,7 +16,7 @@ export class UsersComponent {
   constructor(
     private router:Router,
     @Inject(PLATFORM_ID) private platformID: object,
-    private user:UserService
+    private UserService:UserService
   ){}
 
   userlist:any;
@@ -29,17 +29,22 @@ export class UsersComponent {
   ngOnInit(){
     if(isPlatformBrowser(this.platformID)){
       try{
-        let credc:any = localStorage.getItem("credentials");
-        this.credcheck = JSON.parse(credc);
-        if(this.credcheck.valid){
-          this.curentuserrole = this.credcheck.roles;
-        }
-      } catch {
-        console.log('error on user component')
-      }
-    }
 
-    this.user.getUserList(this.credcheck).subscribe( (data)=>{
+
+        let localsession:any =   localStorage.getItem("session");
+        this.UserService.sessionValid(localsession).subscribe ( async(data)=>{
+          console.log(data);
+          
+      })} catch {
+        //this.validuser = false
+        this.router.navigate(['login']);
+      }
+    } else {
+      this.curentuserrole = [];
+    }
+    
+
+    this.UserService.getUserList(this.credcheck).subscribe( (data)=>{
       this.userlist = data;
       console.log(this.userlist)
     });
@@ -61,7 +66,7 @@ export class UsersComponent {
   }
 
   async addNewUser(){
-    this.user.addNewUser({"email": this.newUserEmail, "username": this.newUserUsername}).subscribe ( (data)=>{
+    this.UserService.addNewUser({"email": this.newUserEmail, "username": this.newUserUsername}).subscribe ( (data)=>{
       console.log(data);
       try{
         this.userlist.push(data[0]);

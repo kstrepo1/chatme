@@ -2,6 +2,7 @@ import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { Router } from '@angular/router';
+import { UserService } from './home/services/user.service';
 
 
 @Component({
@@ -21,20 +22,42 @@ export class AppComponent {
 
   constructor (
     private router:Router,
-    @Inject(PLATFORM_ID) private platformID: object){}
+    @Inject(PLATFORM_ID) private platformID: object,
+    private UserService:UserService
+  ){}
 
   ngOnInit(){
     if(isPlatformBrowser(this.platformID)){
       try{
-        let credc:any = localStorage.getItem("credentials");
-        let credcheck:any = JSON.parse(credc);
-        console.log(credcheck);
-        if(credcheck.valid){
-          this.validuser = true
-          this.credentials = credcheck
-          this.username = credcheck.username
-          this.currentuserrole = credcheck.roles;
-        }
+
+
+
+        // //Localstorage
+        // let credc:any = localStorage.getItem("credentials");
+        // let credcheck:any = JSON.parse(credc);
+
+        let localsession:any =  localStorage.getItem("session");
+        this.UserService.sessionValid(localsession).subscribe ( (data)=>{
+          console.log(data);
+          if(data.valid){
+            this.validuser = true
+            this.credentials = data.userDetails;
+            this.username = data.userDetails[0].username
+            this.currentuserrole = data.userDetails[0].roles;
+
+            for(let i=0; i<this.currentuserrole[0].length; i++){
+              if(this.currentuserrole[i]=="SuperAdmin"){
+                this.canSeeRequests = true;
+              }
+            }
+
+          } else {
+            this.validuser = false
+            this.router.navigate(['login']);
+          }
+        })
+
+
       } catch {
         this.validuser = false
         this.router.navigate(['login']);
@@ -42,18 +65,11 @@ export class AppComponent {
     }else {
       this.currentuserrole = [];
     }
-  
-
-    for(let i=0; i<this.currentuserrole.length; i++){
-      if(this.currentuserrole[i]=="SuperAdmin"){
-        this.canSeeRequests = true;
-      }
-    }
   }
 
   logout(){
     if(isPlatformBrowser(this.platformID)){
-      localStorage.removeItem("credentials");
+      localStorage.removeItem("session");
       window.location.replace("/");
       this.validuser = false
     }
