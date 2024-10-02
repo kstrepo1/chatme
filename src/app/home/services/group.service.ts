@@ -1,27 +1,23 @@
 import { Injectable } from '@angular/core';
-import groups from './groups.json'
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupService {
 
-  constructor() { }
+  constructor(public http:HttpClient) { }
 
-  grouplist = groups.grouplist;
-
-  getGroupList(){
-    //console.log(this.grouplist);
-    return this.grouplist
+  getGroupList(sessionId:any){
+    return this.http.post<any>('http://localhost:3000/api/getGroups', {sessionId: sessionId})
   }
 
 
   newGroup(groupname:any, channels:any[], groupAdminAccess:any[], createdby:any[]){
-    let id: number = this.grouplist.length+1
-    let name = groupname;
-    let channel = channels 
-    let groupAdminAccesss = groupAdminAccess
-    let created = createdby
-    this.grouplist.push({groupname: name, id: id, channels: channel, groupAdminAccess: groupAdminAccesss, createdby: created})
+    return this.http.post<any>('http://localhost:3000/api/createGroup', {groupname: groupname, channels: channels, groupAdminAccess: groupAdminAccess, createdby:createdby })
+  }
+
+  joinGroup(searchUserID:any, groupID:any){
+    return this.http.post<any>('http://localhost:3000/api/joinGroup', {searchUserID: searchUserID, groupID: groupID })
   }
 }

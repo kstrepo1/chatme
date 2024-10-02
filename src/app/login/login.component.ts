@@ -6,6 +6,7 @@ import { AuthcheckService } from '../home/services/authcheck.service';
 import { UserService } from '../home/services/user.service';
 
 import { Router } from '@angular/router';
+import { subscribe } from 'diagnostics_channel';
 
 
 @Component({
@@ -30,26 +31,35 @@ export class LoginComponent {
 
   //On init angualr checks if there is a local storage credential 
   ngOnInit(){
-    // if(isPlatformBrowser(this.platformID)){
-    //   try {
-    //     let credc:any = localStorage.getItem("credentials");
-    //     let credcheck:any = JSON.parse(credc);
-    //     console.log(credcheck);
-    //     if(credcheck.valid){
-    //       console.log("valid")
-    //       this.router.navigate(['home']);
-    //     } else {
-    //       this.router.navigate(['login'])
-    //     }
-    //   } catch {
-    //     console.log("No Authentication Token Detected");
-    //   }
-    // }
+    if(isPlatformBrowser(this.platformID)){
+      try {
+        let credc:any = localStorage.getItem("session");
+
+        this.userService.sessionValid(credc).subscribe( (data)=>{
+          console.log(data);
+          if(data.valid){
+            this.router.navigate(['home']);
+          } else {
+            console.log("No Authentication Token Detected");
+          }
+        })
+  
+        console.log(credc);
+        if(credc.valid){
+          console.log("valid")
+
+        } else {
+
+        }
+      } catch {
+        console.log("Error in login component");
+      }
+    }
   }
 
   signin(){
     console.log(this.emailaddress, this.password);
-    let signin = this.authcheck.credCheck(this.emailaddress,this.password);
+    //let signin = this.authcheck.credCheck(this.emailaddress,this.password);
     this.userService.login(this.emailaddress, this.password).subscribe( (data)=>{
       console.log('login data from proxy');
       console.log(data)
@@ -58,13 +68,6 @@ export class LoginComponent {
         window.location.replace("/home");
       }
     })
-    console.log(signin);
-    if(signin.valid){
-      let creds = JSON.stringify(signin)
-      localStorage.setItem("credentials", creds);
-    } else {
-      this.error = "Password Error, Please Try Again."
-    }
 
   }
 

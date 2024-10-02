@@ -19,6 +19,7 @@ export class AppComponent {
   validuser:boolean = false;
   canSeeRequests:boolean = false;
   currentuserrole:any;
+  localsession:any
 
   constructor (
     private router:Router,
@@ -36,8 +37,8 @@ export class AppComponent {
         // let credc:any = localStorage.getItem("credentials");
         // let credcheck:any = JSON.parse(credc);
 
-        let localsession:any =  localStorage.getItem("session");
-        this.UserService.sessionValid(localsession).subscribe ( (data)=>{
+        this.localsession =  localStorage.getItem("session");
+        this.UserService.sessionValid(this.localsession).subscribe ( (data)=>{
           console.log(data);
           if(data.valid){
             this.validuser = true
@@ -71,7 +72,9 @@ export class AppComponent {
     if(isPlatformBrowser(this.platformID)){
       localStorage.removeItem("session");
       window.location.replace("/");
-      this.validuser = false
+      this.validuser = false;
+
+      this.UserService.logOut(this.localsession).subscribe()
     }
   }
 

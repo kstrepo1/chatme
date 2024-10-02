@@ -65,35 +65,21 @@ exports.userLookup = async function(req, res, client, dbName) {
     let db = client.db(dbName);
     console.log(req.body.searchUserID)
     const docs = await db.collection(collectionName).find({"_id": new ObjectId(req.body.searchUserID)}).toArray()
-    let userList = [];
-    console.log(docs)
-    for(let i=0; i<docs.length; i++){
-        let user = {
-          username: docs[i].username,
-          email : docs[i].email,
-          _id: docs[i]._id,
-          roles: docs[i].roles,
-          groups: docs[i].groups
-        }
-        userList.push(user)
-    }
-    res.send(userList);
-    //client.close();
+    res.send(dataCleanse(docs));
+
 };
 
 exports.update = async function(req, res, client) {
 
     await client.connect();
     console.log("mongo update ");
-    let db = client.db("dbName"); // Create a Product
+    let db = client.db("dbName"); 
     let queryJSON = req.body.query;
     let updateJSON = req.body.update;
-    result = await db.collection("colName").updateMany(queryJSON, { $set: updateJSON });
-    // Update document with queryJSON, set updateJSON      
+    result = await db.collection("colName").updateMany(queryJSON, { $set: updateJSON }); 
     console.log("for the documents with", queryJSON);
     console.log("SET: ", updateJSON);
     res.send(result);
-    //client.close();
 }
 
 exports.delete = function(req, res, client) {
@@ -103,7 +89,6 @@ exports.delete = function(req, res, client) {
     db.collection("colName").deleteMany(queryJSON);
     console.log("Removed the documents with: ", queryJSON);
     res.send(queryJSON);
-    //client.close();
 
 };
 
@@ -222,4 +207,14 @@ exports.sessionInfo = async function(req, res, client, dbName) {
     let results = await sessionCheck(sessionId, client, dbName)
 
     res.send(results);
+};
+
+//sessionInfo Check 
+exports.sessionLogout = async function(req, res, client, dbName, sessionId) {
+    console.log(sessionId + " sessionLogout attempt")
+    await client.connect();
+    let db = client.db(dbName);
+    let sessionSearch = await db.collection("Sessions").deleteOne({"_id": new ObjectId(sessionId)});
+    console.log(sessionSearch);
+    res.send(sessionSearch);
 };

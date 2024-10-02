@@ -19,7 +19,8 @@ export class UserComponent {
 
   //Variables for the user page 
   userid:any;
-  userinfo:any = {username:"", email:""}
+  thisuserinfo:any = {username:"", email:""}
+  userinfo:any = {username:"", email:""};
   currentuserrole:any;
   promoteusersuperadmin:any = false;
   promoteusergroupadmin:any = false;
@@ -38,18 +39,18 @@ export class UserComponent {
   }
 
   ngOnInit(){
+
+    this.UserService.getUserInfo(1,this.userid).subscribe( (data)=>{
+      this.userinfo = data[0]
+    })
+
     if(isPlatformBrowser(this.platformID)){
       try{
         let localsession:any =   localStorage.getItem("session");
-        console.log(localsession);
 
         this.UserService.sessionValid(localsession).subscribe ( (data)=>{
-          console.log("user")
-          console.log(data);
-          this.userinfo = data.userDetails[0]
+          this.thisuserinfo = data.userDetails[0]
           this.currentuserrole = data.userDetails[0].roles
-          console.log(this.currentuserrole);
-
 
         //Promote Eligibility Check 
         for(let i=0; i<this.currentuserrole.length; i++){
@@ -71,19 +72,23 @@ export class UserComponent {
           }
         }
     
-    
         //Checks user groups that viewed user belongs to for showing on view. 
         this.usergroups = [];
-        let fullgrouplist = this.group.getGroupList()
-        console.log(fullgrouplist);
-      
-        for(let a=0; a<this.userinfo.groups.length; a++){
-          for(let b = 0; b<fullgrouplist.length; b++){
-            if(this.userinfo.groups[a]== fullgrouplist[b].id){
-              this.usergroups.push(fullgrouplist[b].groupname)
+        this.group.getGroupList(localsession).subscribe((data)=>{
+          let fullgrouplist = data
+          console.log(this.userinfo.groups);
+          for(let a=0; a<this.userinfo.groups.length; a++){
+            for(let b = 0; b<fullgrouplist.length; b++){
+              if(this.userinfo.groups[a]== fullgrouplist[b].id){
+                this.usergroups.push(fullgrouplist[b].groupname)
+              }
             }
           }
-        }
+          console.log(fullgrouplist);
+        })
+
+      
+
       })} catch {
         //this.validuser = false
         this.router.navigate(['login']);
@@ -94,9 +99,7 @@ export class UserComponent {
 
 
 
-    this.UserService.getUserInfo(1,this.userid).subscribe( (data)=>{
-      this.userinfo = data[0]
-    })
+
 
 
 
