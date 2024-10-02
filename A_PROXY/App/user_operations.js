@@ -30,7 +30,7 @@ exports.insert = async function(req, res, client, dbName) {
         { username: doc.username,
         email: doc.email,
         password: '123',
-        roles: [],
+        roles: [ 'ChatUser' ],
         groups: []}
     await db.collection(collectionName).insertOne(newUser);
     let newuserdetails = await db.collection(collectionName).find({"email": doc.email}).toArray();

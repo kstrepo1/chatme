@@ -17,6 +17,7 @@ export class GroupsComponent {
   currentusergroups:any;
   canCreateGroup:any = false;
   localsession:any;
+  isSuperAdmin:any;
 
   constructor(private groups:GroupService,
     private router:Router,
@@ -35,9 +36,11 @@ export class GroupsComponent {
 
           if(data.valid){
             this.curentuserrole = data.userDetails[0].roles;
+            this.isSuperAdmin = this.curentuserrole.includes("SuperAdmin")
+            
             this.currentusergroups = data.userDetails[0].groups
           }
-
+          
 
         this.groups.getGroupList(this.localsession).subscribe((data:any)=>{
           this.grouplist = data
@@ -49,11 +52,11 @@ export class GroupsComponent {
           for(let a=0; a<this.grouplist.length;a++){
             matched = false
             for(let b=0; b<this.currentusergroups.length;b++){
-              
               if(this.grouplist[a].id == this.currentusergroups[b]){
                 authgroupcheck.push({id:a, joined:true, groupname: this.grouplist[a].groupname, channels: this.grouplist[a].channels , groupAdminAccess: this.grouplist[a].groupAdminAccess})
                 matched = true
               } 
+              
             }
             if(!matched){
               authgroupcheck.push({id:a, joined:false, groupname: this.grouplist[a].groupname, channels: this.grouplist[a].channels , groupAdminAccess: this.grouplist[a].groupAdminAccess})

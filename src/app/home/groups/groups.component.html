@@ -7,7 +7,7 @@
         <br>
         <button type="button" class="btn btn-primary" (click)="groupView(group.id)">View</button>
         &nbsp;
-        @if(!group.joined){
+        @if(!group.joined && isSuperAdmin){
             <button type="button" class="btn btn-info btn-sm">Join</button>
         }
     </div>   

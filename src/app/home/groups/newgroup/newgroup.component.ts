@@ -52,6 +52,7 @@ export class NewgroupComponent {
   }
 
   addGroup(){
+    console.log("action")
     this.group.newGroup(this.groupName, this.newchannels, this.currentUserID, this.currentUserID).subscribe( (data)=>{
       console.log(data);
       if(data.successGroupAdd){

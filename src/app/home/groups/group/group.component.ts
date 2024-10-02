@@ -31,6 +31,7 @@ export class GroupComponent {
   options:Boolean = false;
   channelSelected:any;
   localsession:any
+  approvaltoJoin:boolean = true;
 
 
 
@@ -60,6 +61,7 @@ export class GroupComponent {
             for(let i=0; i<this.curentuserrole.length; i++){
               if(this.curentuserrole[i]=="SuperAdmin"){
                 this.curentuserrole = true;
+                this.approvaltoJoin = false;
               }
             }
             this.currentusergroups = this.currentuserinfo[0].groups;
@@ -77,6 +79,7 @@ export class GroupComponent {
                 this.currentUserJoined = true
               }
             }
+
           } else {
             this.router.navigate(['login']);
           }
@@ -133,6 +136,14 @@ export class GroupComponent {
   joinGroup(){
     this.group.joinGroup(this.currentuserinfo, this.groupid,).subscribe(data => {
       console.log(data);
+      location.reload();
+    });
+  }
+
+  leaveGroup(){
+    this.group.leaveGroup(this.currentuserinfo, this.groupid,).subscribe(data => {
+      console.log(data);
+      location.reload();
     });
   }
 

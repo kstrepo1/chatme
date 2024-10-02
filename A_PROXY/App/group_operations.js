@@ -26,6 +26,7 @@ exports.addNewGroup = async function(req, res, client, dbName) {
         await client.connect();
         console.log("mongo Group Add");
         let db = client.db(dbName);
+        let groups = await db.collection(collectionName).find({}).toArray()
         let newGroup = {"groupname": req.body.groupname, "id": groups.length, "channels":req.body.channels, "groupAdminAccess": req.body.groupAdminAccess, "createdby": req.body.createdby}
         await db.collection(collectionName).insertOne(newGroup);
         res.send({successGroupAdd:true});
@@ -44,6 +45,20 @@ exports.joinGroup = async function(req, res, client, dbName) {
         let db = client.db(dbName);
         await db.collection("Users").updateOne({"_id": new ObjectId(req.body.searchUserID[0]._id)}, {$addToSet: {groups: req.body.groupID}})
         res.send({successGroupJoin:true});
+    } catch (error){
+        console.error(error);
+        res.status(500);
+    } 
+}
+
+exports.leaveGroup = async function(req, res, client, dbName) {
+
+    try{
+        await client.connect();
+        console.log("mongo Join Group");
+        let db = client.db(dbName);
+        await db.collection("Users").updateOne({"_id": new ObjectId(req.body.searchUserID[0]._id)}, {$pull: {groups: req.body.groupID}})
+        res.send({successGroupLeave:true});
     } catch (error){
         console.error(error);
         res.status(500);
