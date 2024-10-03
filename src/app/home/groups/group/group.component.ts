@@ -31,7 +31,7 @@ export class GroupComponent {
   options:Boolean = false;
   channelSelected:any;
   localsession:any
-  approvaltoJoin:boolean = true;
+  approvaltoJoin:boolean = false;
 
 
 
@@ -62,15 +62,20 @@ export class GroupComponent {
               if(this.curentuserrole[i]=="SuperAdmin"){
                 this.curentuserrole = true;
                 this.approvaltoJoin = false;
+                this.canaddchanel = true;
+              } else if(this.curentuserrole[i] == "GroupAdmin"){
+                this.canaddchanel = true;
+              } else {
+                this.approvaltoJoin = true;
               }
+
             }
             this.currentusergroups = this.currentuserinfo[0].groups;
 
             // Can Add Channel Check 
-            for( let x = 0; x<this.curentuserrole.length; x++){
-              if(this.curentuserrole[x] == "GroupAdmin" || this.curentuserrole[x] == "SuperAdmin"){
-                this.canaddchanel = true
-              }
+            for( let i = 0; i<this.curentuserrole.length; i++){
+              console.log(this.curentuserrole[i])
+
             }
 
                 //Join Check
@@ -111,14 +116,25 @@ export class GroupComponent {
 
   //Add new channel function
   addChanel(name:any){
+
     if(this.addingChannel){
-      this.addingChannel = false;
-      this.groupChannels.push(name);
-      this.newChannelName = "";
+      console.log(this.groupid);
+      this.group.addChannel(this.currentuserinfo, this.groupid, name).subscribe(data => {
+        console.log(data);
+        if(data.ChannelSuccessAdd){
+          this.addingChannel = false;
+          this.groupChannels.push(name);
+          this.newChannelName = "";
+        }
+  
+      });
 
     } else {
       this.addingChannel = true;
     }
+
+
+
   }
 
   toggleOptions(){
@@ -145,6 +161,16 @@ export class GroupComponent {
       console.log(data);
       location.reload();
     });
+  }
+
+  deleteGroup(){
+    this.group.deleteGroup(this.currentuserinfo, this.groupid).subscribe( data => {
+      let d = data
+      console.log(data);
+      this.router.navigate(['groups'])
+    }
+
+    )
   }
 
 }

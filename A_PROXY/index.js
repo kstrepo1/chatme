@@ -57,7 +57,8 @@ async function main() {
     app.post('/api/createGroup', (req,res) => groups.addNewGroup(req, res, client, dbName));
     app.post('/api/joinGroup', (req,res) => groups.joinGroup(req, res, client, dbName));
     app.post('/api/leaveGroup', (req,res) => groups.leaveGroup(req, res, client, dbName));
-
+    app.post('/api/deleteGroup', (req,res) => groups.deleteGroup(req, res, client, dbName));
+    app.post('/api/addChannel', (req,res) => groups.addChannel(req, res, client, dbName));
     
 
     require('./App/listen')(app);

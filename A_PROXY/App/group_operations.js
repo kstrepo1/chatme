@@ -65,6 +65,37 @@ exports.leaveGroup = async function(req, res, client, dbName) {
     } 
 }
 
+exports.addChannel = async function(req, res, client, dbName) {
+
+    try{
+        await client.connect();
+        console.log("mongo add channel");
+        let db = client.db(dbName);
+
+        let addChannel = await db.collection(collectionName).updateOne({id: Number(req.body.groupID)}, {$addToSet: {channels: req.body.channels}})
+        res.send({ChannelSuccessAdd:true, addChannel: addChannel});
+
+    } catch (error){
+        console.error(error);
+        res.status(500);
+    } 
+}
+
+exports.deleteGroup = async function(req, res, client, dbName) {
+
+    try{
+        await client.connect();
+        console.log("mongo add channel");
+        let db = client.db(dbName);
+
+        await db.collection(collectionName).deleteOne({id: Number(req.body.groupID)})
+        res.send({"deleteGroup":true});
+
+    } catch (error){
+        console.error(error);
+        res.status(500);
+    } 
+}
 
 
 
