@@ -37,9 +37,11 @@ async function main() {
     app.post('/api/adduser', (req, res) => users.insert(req, res, client, dbName));
     app.post('/api/getUserList', (req, res) => users.userList(req, res, client, dbName));
     app.post('/api/getUser', (req, res) => users.userLookup(req, res, client, dbName));
+    app.post('/api/promoteUser', (req, res) => users.promoteUser(req, res, client, dbName));
     app.delete('/api/sessionlogout/:id', (req, res) => { const sessionId = req.params.id;
         users.sessionLogout(req, res, client, dbName, sessionId);
     });
+
     
 
 //TODO

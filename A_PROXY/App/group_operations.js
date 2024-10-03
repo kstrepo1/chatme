@@ -97,6 +97,21 @@ exports.deleteGroup = async function(req, res, client, dbName) {
     } 
 }
 
+exports.updateGroup = async function(req, res, client, dbName) {
+
+    try{
+        await client.connect();
+        console.log("mongo add channel");
+        let db = client.db(dbName);
+
+        let addChannel = await db.collection(collectionName).updateOne({id: Number(req.body.groupID)}, {$addToSet: {channels: req.body.channels}})
+
+    } catch (error){
+        console.error(error);
+        res.status(500);
+    } 
+}
+
 
 
 const groupSeedData = [

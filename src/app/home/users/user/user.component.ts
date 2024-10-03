@@ -96,14 +96,25 @@ export class UserComponent {
     } else {
       this.currentuserrole = [];
     }
-
-
-
-
-
-
-
   }
+
+
+  promoteToGroupAdmin(){
+    this.UserService.promoteUser(this.thisuserinfo._id, this.userinfo._id, "GroupAdmin" ).subscribe( (data)=>{
+      console.log(data);
+      location.reload();
+    })
+      
+  }
+
+  promoteToSuperAdmin(){
+    this.UserService.promoteUser(this.thisuserinfo._id, this.userinfo._id, "SuperAdmin" ).subscribe( (data)=>{
+      console.log(data);
+      location.reload();
+    })
+  }
+
+
 }
     
 

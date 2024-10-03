@@ -47,4 +47,8 @@ export class UserService {
     )
   }
 
+  promoteUser(currentUserID:any, promoteUserID:any, typeOfPromotion:any){
+    return this.http.post<any>('http://localhost:3000/api/promoteUser', {currentUserID:currentUserID, promoteUserID: promoteUserID, typeOfPromotion:typeOfPromotion})
+  }
+
 }

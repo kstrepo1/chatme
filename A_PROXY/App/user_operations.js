@@ -218,3 +218,14 @@ exports.sessionLogout = async function(req, res, client, dbName, sessionId) {
     console.log(sessionSearch);
     res.send(sessionSearch);
 };
+
+exports.promoteUser = async function(req, res, client, dbName) {
+    await client.connect();
+    console.log("mongo promote user ");
+    let db = client.db(dbName); 
+    console.log(req.body);
+    let promoteUserID = req.body.promoteUserID
+    let typeOfPromotion = req.body.typeOfPromotion
+    result = await db.collection(collectionName).updateOne({_id: new ObjectId(promoteUserID)}, { $addToSet: {roles: `${typeOfPromotion}`} } ); 
+    res.send(result);
+}

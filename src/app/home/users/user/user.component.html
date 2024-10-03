@@ -16,13 +16,13 @@
     <br>
 
     @if(promoteusergroupadmin){
-        <button type="button" class="btn btn-success">Promote to Group Admin</button>
+        <button type="button" class="btn btn-success" (click)="promoteToGroupAdmin()">Promote to Group Admin</button>
         <br><br>
     }
 
 
     @if(promoteusersuperadmin){
-        <button type="button" class="btn btn-warning">Promote to SuperAdmin</button>
+        <button type="button" class="btn btn-warning" (click)="promoteToSuperAdmin()">Promote to SuperAdmin</button>
         <br><br>
     }
 
