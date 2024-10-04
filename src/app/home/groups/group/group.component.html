@@ -61,10 +61,19 @@
     <div id="chatdiv"class="col-9">
         <h4>{{channelSelected}} Chat &nbsp; </h4>
 
+        <div id="chatbubble">
+            @for(chat of chatHistory; track chat){
+                @if(chat.groupID == groupid && chat.channel == channelSelected){
+                {{chat.username}}: {{chat.message}}<br>
+                }
+            }
+        </div>
+
+
         <div class="row">
             <div class="input-group" id="chatbox">
-                <textarea class="form-control" aria-label="With textarea"></textarea>
-                <button class="btn btn-outline-primary" type="button" id="button-addon2">Send</button>
+                <textarea class="form-control" aria-label="With textarea" name="messagecontent" [(ngModel)]="messagecontent"></textarea>
+                <button class="btn btn-outline-primary" type="button" id="button-addon2" (click)="sendMessage()">Send</button>
             </div>
         </div>
 
