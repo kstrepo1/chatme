@@ -75,7 +75,7 @@ async function main() {
     require('./App/listen')(app);
 
 
-    sockets.connect(io, 3000);
+    //sockets.connect(io, 3000);
 
 
 }
