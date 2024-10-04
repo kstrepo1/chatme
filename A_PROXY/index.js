@@ -9,21 +9,27 @@ const express = require('express'),
     client = new MongoClient(url),
     cors = require('cors');
 
+const io = require('socket.io')(http, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+    }
+});
+
 app.use(cors());
 app.use(express.json());
 
 //DB Name
 const dbName='chatme';
-//const dbCollection='products'
-
 
 async function main() {
     await client.connect();
     console.log('Connected Successfully');
-    const db = client.db(dbName);
-    //const collection = db.collection(dbCollection);
+
     const users = require('./App/user_operations');
-    const groups = require('./App/group_operations')
+    const groups = require('./App/group_operations');
+    const sockets = require('./App/sockets.js');
+
 
     //Data Seeding 
         // seedUsers = async () => {await users.seed(client, dbName)};
@@ -31,6 +37,9 @@ async function main() {
 
         // seedGroups = async () => {await groups.seed(client, dbName)}
         // await seedGroups();
+    
+    //
+
     
     //Routes
     // ----------- USERS ------------
@@ -64,6 +73,11 @@ async function main() {
     
 
     require('./App/listen')(app);
+
+
+    sockets.connect(io, 3000);
+
+
 }
 
 main()

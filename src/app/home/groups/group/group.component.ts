@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { GroupService } from '../../services/group.service';
 //import { AuthcheckService } from '../../services/authcheck.service';
 import { UserService } from '../../services/user.service';
+import { SocketioService } from '../../services/socketio.service';
+
 
 @Component({
   selector: 'app-group',
@@ -32,7 +34,14 @@ export class GroupComponent {
   channelSelected:any;
   localsession:any
   approvaltoJoin:boolean = false;
+  chatHistory:any = [{username: "Username",
+                      datetime: 1727940945077,
+                      message: "New Message"
+  }]
 
+  socket:any  
+  ioConnection:any;
+  messagecontent:any = "";
 
 
   //Constructor uses activated route to determine which user to load. 
@@ -42,7 +51,8 @@ export class GroupComponent {
     private group:GroupService,
     //private auth:AuthcheckService, *RM
     @Inject(PLATFORM_ID) private platformID: object,
-    private UserService:UserService
+    private UserService:UserService,
+    public SocketioService:SocketioService
   ){
     this.activatedRoute.params.subscribe(params => this.groupid = params["id"])
   }
@@ -88,6 +98,7 @@ export class GroupComponent {
           } else {
             this.router.navigate(['login']);
           }
+          this.initIoConnection();
         })
       } catch {
         console.log('error on user component');
@@ -105,8 +116,15 @@ export class GroupComponent {
       this.groupMembers = matchedUsers;
     });
     
-
-
+  }
+  
+  private initIoConnection(){
+    this.SocketioService.initSocket();
+    this.ioConnection = this.SocketioService.onMessage()
+    .subscribe((message:any) => {
+      console.log(message)
+      this.chatHistory.push(message);
+    })
   }
     
   //Navigate back to groups 
@@ -172,5 +190,23 @@ export class GroupComponent {
 
     )
   }
+
+  sendMessage(){
+    console.log("sent");
+    if(this.messagecontent){
+      let transmission =   {
+        username: this.currentuserinfo[0].username,
+        _id: this.currentuserinfo[0]._id,
+        groupID: this.groupid,
+        groupName: this.groupName,
+        channel: this.channelSelected,
+        datetime: new Date(),
+        message: this.messagecontent
+      }
+      this.SocketioService.send(transmission)
+      this.messagecontent="";
+    } 
+  }
+
 
 }
