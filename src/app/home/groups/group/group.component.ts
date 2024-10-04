@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GroupService } from '../../services/group.service';
-//import { AuthcheckService } from '../../services/authcheck.service';
 import { UserService } from '../../services/user.service';
 import { SocketioService } from '../../services/socketio.service';
 
@@ -49,10 +48,9 @@ export class GroupComponent {
     private activatedRoute: ActivatedRoute,
     private router:Router,
     private group:GroupService,
-    //private auth:AuthcheckService, *RM
     @Inject(PLATFORM_ID) private platformID: object,
     private UserService:UserService,
-    //public SocketioService:SocketioService
+    public SocketioService:SocketioService
   ){
     this.activatedRoute.params.subscribe(params => this.groupid = params["id"])
   }
@@ -98,7 +96,16 @@ export class GroupComponent {
           } else {
             this.router.navigate(['login']);
           }
-          //this.initIoConnection();
+
+          this.group.getMessages(this.localsession, this.groupid).subscribe ( (data)=>{
+            console.log(data);
+            for(let i=0;i<data.length;i++){
+              this.chatHistory.push(data[i].message)
+            };
+            console.log(this.chatHistory);
+          });
+
+          this.initIoConnection();
         })
       } catch {
         console.log('error on user component');
@@ -110,7 +117,9 @@ export class GroupComponent {
       this.groupName = data[this.groupid].groupname;
       this.groupChannels = data[this.groupid].channels;
       this.channelSelected=this.groupChannels[0];
-    })
+    });
+
+
 
     this.UserService.getGroupUserlist(this.groupid, this.localsession).subscribe(matchedUsers => {
       this.groupMembers = matchedUsers;
@@ -118,14 +127,14 @@ export class GroupComponent {
     
   }
   
-  // private initIoConnection(){
-  //   this.SocketioService.initSocket();
-  //   this.ioConnection = this.SocketioService.onMessage()
-  //   .subscribe((message:any) => {
-  //     console.log(message)
-  //     this.chatHistory.push(message);
-  //   })
-  // }
+  private initIoConnection(){
+    this.SocketioService.initSocket();
+    this.ioConnection = this.SocketioService.onMessage()
+    .subscribe((message:any) => {
+      console.log(message)
+      this.chatHistory.push(message);
+    })
+  }
     
   //Navigate back to groups 
   navgroups(){
@@ -194,16 +203,16 @@ export class GroupComponent {
   sendMessage(){
     console.log("sent");
     if(this.messagecontent){
-      // let transmission =   {
-      //   username: this.currentuserinfo[0].username,
-      //   _id: this.currentuserinfo[0]._id,
-      //   groupID: this.groupid,
-      //   groupName: this.groupName,
-      //   channel: this.channelSelected,
-      //   datetime: new Date(),
-      //   message: this.messagecontent
-      // }
-      // this.SocketioService.send(transmission)
+      let transmission =   {
+        username: this.currentuserinfo[0].username,
+        _id: this.currentuserinfo[0]._id,
+        groupID: this.groupid,
+        groupName: this.groupName,
+        channel: this.channelSelected,
+        datetime: new Date(),
+        message: this.messagecontent
+      }
+      this.SocketioService.send(transmission)
       this.messagecontent="";
     } 
   }

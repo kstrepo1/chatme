@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-const SERVER_URL = "http://localhost:3000";
+const SERVER_URL = "http://localhost:3001";
 
 import io from 'socket.io-client';
 

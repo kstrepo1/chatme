@@ -1,4 +1,4 @@
-exports.connect = async function(io, PORT){
+const connect = (io, PORT) => {
     console.log("Sockets Activated")
     
     io.on('connection', (socket)=>{
@@ -11,3 +11,5 @@ exports.connect = async function(io, PORT){
     })
 
 }
+
+module.exports = connect

@@ -1,7 +1,6 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms'
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { AuthcheckService } from '../home/services/authcheck.service';
 
 import { UserService } from '../home/services/user.service';
 
@@ -22,7 +21,7 @@ export class LoginComponent {
   password:string= "";
   error:string="";
 
-  constructor (private authcheck:AuthcheckService,
+  constructor (
     private router:Router,
     @Inject(PLATFORM_ID) private platformID: object,
     private userService:UserService
@@ -59,7 +58,6 @@ export class LoginComponent {
 
   signin(){
     console.log(this.emailaddress, this.password);
-    //let signin = this.authcheck.credCheck(this.emailaddress,this.password);
     this.userService.login(this.emailaddress, this.password).subscribe( (data)=>{
       console.log('login data from proxy');
       console.log(data)
