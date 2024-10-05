@@ -31,33 +31,30 @@ export class AppComponent {
     if(isPlatformBrowser(this.platformID)){
       try{
 
-
-
-        // //Localstorage
-        // let credc:any = localStorage.getItem("credentials");
-        // let credcheck:any = JSON.parse(credc);
-
         this.localsession =  localStorage.getItem("session");
-        this.UserService.sessionValid(this.localsession).subscribe ( (data)=>{
+        if(this.localsession != undefined){
+          this.UserService.sessionValid(this.localsession).subscribe ( (data)=>{
           console.log(data);
           if(data.valid){
-            this.validuser = true
-            this.credentials = data.userDetails;
-            this.username = data.userDetails[0].username
-            this.currentuserrole = data.userDetails[0].roles;
+              this.validuser = true
+              this.credentials = data.userDetails;
+              this.username = data.userDetails[0].username
+              this.currentuserrole = data.userDetails[0].roles;
 
-            for(let i=0; i<this.currentuserrole[0].length; i++){
-              if(this.currentuserrole[i]=="SuperAdmin"){
-                this.canSeeRequests = true;
+              for(let i=0; i<this.currentuserrole[0].length; i++){
+                if(this.currentuserrole[i]=="SuperAdmin"){
+                  this.canSeeRequests = true;
+                }
               }
+
+            } else {
+              this.validuser = false
+              this.router.navigate(['login']);
             }
-
-          } else {
-            this.validuser = false
-            this.router.navigate(['login']);
-          }
-        })
-
+          })
+        } else {
+          this.router.navigate(['login']);
+        }
 
       } catch {
         this.validuser = false

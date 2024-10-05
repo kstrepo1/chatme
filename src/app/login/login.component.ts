@@ -5,7 +5,6 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { UserService } from '../home/services/user.service';
 
 import { Router } from '@angular/router';
-import { subscribe } from 'diagnostics_channel';
 
 
 @Component({
@@ -34,22 +33,17 @@ export class LoginComponent {
       try {
         let credc:any = localStorage.getItem("session");
 
-        this.userService.sessionValid(credc).subscribe( (data)=>{
-          console.log(data);
-          if(data.valid){
-            this.router.navigate(['home']);
-          } else {
-            console.log("No Authentication Token Detected");
-          }
-        })
-  
-        console.log(credc);
-        if(credc.valid){
-          console.log("valid")
-
-        } else {
-
+        if (credc!=undefined){
+          this.userService.sessionValid(credc).subscribe( (data)=>{
+            console.log(data);
+            if(data.valid){
+              this.router.navigate(['home']);
+            } else {
+              console.log("No Authentication Token Detected");
+            }
+          })
         }
+
       } catch {
         console.log("Error in login component");
       }
@@ -61,9 +55,12 @@ export class LoginComponent {
     this.userService.login(this.emailaddress, this.password).subscribe( (data)=>{
       console.log('login data from proxy');
       console.log(data)
-      localStorage.setItem("session", data.session);
+      
       if(data.valid){
+        localStorage.setItem("session", data.session);
         window.location.replace("/home");
+      } else {
+        this.error="Sign Error, Please Try Again"
       }
     })
 
