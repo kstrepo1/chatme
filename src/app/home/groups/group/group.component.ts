@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GroupService } from '../../services/group.service';
 import { UserService } from '../../services/user.service';
 import { SocketioService } from '../../services/socketio.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -15,6 +16,9 @@ import { SocketioService } from '../../services/socketio.service';
   templateUrl: './group.component.html',
   styleUrl: './group.component.scss'
 })
+
+
+
 export class GroupComponent {
   groupid:any;
   groupName:any;
@@ -51,11 +55,13 @@ export class GroupComponent {
     @Inject(PLATFORM_ID) private platformID: object,
     private UserService:UserService,
     public SocketioService:SocketioService,
+    private toastr:ToastrService
   ){
     this.activatedRoute.params.subscribe(params => this.groupid = params["id"]);
   }
 
   ngOnInit(){
+
 
     if(isPlatformBrowser(this.platformID)){
       try{
@@ -63,9 +69,10 @@ export class GroupComponent {
         this.UserService.sessionValid(this.localsession).subscribe ( (data)=>{
           if(data.valid){
             this.currentuserinfo = data.userDetails;
+
             this.curentuserrole = data.userDetails[0].roles;
             this.avatar = data.userDetails[0].avatarPath;
-
+            this.getGrouplist();
             for(let i=0; i<this.curentuserrole.length; i++){
               if(this.curentuserrole[i]=="SuperAdmin"){
                 this.curentuserrole = true;
@@ -110,35 +117,37 @@ export class GroupComponent {
       }
     }
 
-    this.group.getGroupList(this.localsession).subscribe((data)=>{
-      this.groupName = data[this.groupid].groupname;
-      this.groupChannels = data[this.groupid].channels;
-      this.channelSelected=this.groupChannels[0];
-    });
-
-
 
     this.UserService.getGroupUserlist(this.groupid, this.localsession).subscribe(matchedUsers => {
       this.groupMembers = matchedUsers;
     });
     
   }
-  
-  private initIoConnection(){
+
+   async initIoConnection(){
     this.SocketioService.initSocket();
     this.ioConnection = this.SocketioService.onMessage()
     .subscribe((message:any) => {
-      console.log(message)
       this.chatHistory.unshift(message);
-      //this.SocketioService.join({user:this.currentUserID})
+    })
+    this.SocketioService.onJoin().subscribe((join) => {
+      this.groupJoinToastActivate(join)
     })
   }
-
 
     
   //Navigate back to groups 
   navgroups(){
     this.router.navigate(['groups'])
+  }
+
+  async getGrouplist(){
+    this.group.getGroupList(this.localsession).subscribe((data)=>{
+      this.groupName = data[this.groupid].groupname;
+      this.groupChannels = data[this.groupid].channels;
+      this.channelSelected=this.groupChannels[0];
+      this.SocketioService.join({user: this.currentuserinfo[0].username, group: this.groupName, groupid: this.groupid})
+    });
   }
 
   //Add new channel function
@@ -264,8 +273,17 @@ export class GroupComponent {
   requestToJoinGroup(){
     console.log(this.currentuserinfo);
     console.log(this.groupid);
+    this.toastr.success('Approval Requested' );
+  }
+
+  groupJoinToastActivate(data:any){
+    console.log()
+    if(data.groupid == this.groupid && data.user !=this.currentuserinfo[0].username){
+    this.toastr.info(data.user + ' Has Joined ');
+    }
 
   }
+
 
 
 }

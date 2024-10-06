@@ -26,15 +26,15 @@ module.exports = {
         
             socket.on('message', async (message)=>{
                 await storeMessage(message);
+                console.log(message)
                 io.emit('message', message);
                      
             });
 
-            
-            socket.on('image', async (imageData)=>{
-            console.log(imageData)
-                //io.emit('message', message);
-                     
+
+            socket.on('join', async (data)=>{
+            console.log(data)
+            io.emit('join', data);
             });
         })
     }

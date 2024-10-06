@@ -24,16 +24,27 @@ export class SocketioService {
     this.socket.emit('message', message);
   }
 
-  image(message:any){
-    this.socket.emit('image', message);
+  // image(message:any){
+  //   this.socket.emit('image', message);
+  // }
+
+  join(message:any){
+    this.socket.emit('join', message);
   }
 
   //Get Message
   onMessage(){
     return new Observable(observer=>{
       this.socket.on('message', (data:any) =>{
-        observer.next(data);
         console.log(data)
+      })
+    })
+  }
+
+  onJoin(){
+    return new Observable(observer=>{
+      this.socket.on('join', (data:any) =>{
+        observer.next(data);
       })
     })
   }
