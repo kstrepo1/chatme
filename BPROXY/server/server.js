@@ -29,13 +29,21 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix + '.' + file.mimetype[6]+ file.mimetype[7] + file.mimetype[8])
+      let extension
+      if(file.mimetype == "image/jpeg"){
+        extension = "jpeg"
+      } else {
+        extension = file.mimetype[6]+ file.mimetype[7] + file.mimetype[8]
+      }
+      cb(null, file.fieldname + '-' + uniqueSuffix + '.' + extension)
     }
   })
   const upload = multer({storage: storage});
 //Express cors middleware
 app.use(cors());
 app.use(bodyParser.json()); 
+
+client.connect();
 
 app.get('/', (req, res)=> res.send('Hello World'));
 
@@ -44,7 +52,7 @@ app.post('/test', (req,res) => res.send(req.body));
     //Data Seeding 
         //users.seed(client, dbName)
 
-        // await groups.seed(client, dbName)
+        //await groups.seed(client, dbName)
     
     //
     
@@ -57,6 +65,9 @@ app.post('/api/promoteUser', (req, res) => users.promoteUser(req, res, client, d
 app.delete('/api/sessionlogout/:id', (req, res) => { const sessionId = req.params.id;
     users.sessionLogout(req, res, client, dbName, sessionId);
 });
+app.post('/api/updateUser', (req,res)=> users.updateUser(req,res,client,dbName))
+app.post('/api/updateAvatarImage', (req,res)=> users.updateAvatarImage(req,res,client,dbName))
+
 
 //Sign In
 app.post('/api/login', (req, res) => users.signInto(req, res, client, dbName));

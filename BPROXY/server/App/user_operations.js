@@ -16,7 +16,8 @@ function dataCleanse(data){
           email : data[i].email,
           _id: data[i]._id,
           roles: data[i].roles,
-          groups: data[i].groups
+          groups: data[i].groups,
+          avatarPath: data[i].avatarPath
         }
         userList.push(user)
     }
@@ -62,7 +63,7 @@ const seedData = [
     
 
  async function sessionCheck(sessionID, client, dbName){
-    await client.connect();
+    
     let db = client.db(dbName);
     let sessionSearch = await db.collection("Sessions").find({"_id": new ObjectId(sessionID)}).toArray()
     
@@ -80,7 +81,8 @@ const seedData = [
                 email : sessionuserinfo[i].email,
                 _id: sessionuserinfo[i]._id,
                 roles: sessionuserinfo[i].roles,
-                groups: sessionuserinfo[i].groups
+                groups: sessionuserinfo[i].groups,
+                avatarPath: sessionuserinfo[i].avatarPath
                 }
                 userList.push(user)
             }
@@ -102,30 +104,34 @@ module.exports = {
     },
 
     signInto: async function(req, res, client, dbName) {
-        await client.connect();
-        console.log("mongo signin");
-        //console.log(req.body)
-        let email = req.body.email
-        let pass = req.body.password
-        let db = client.db(dbName);
-        let docs = await db.collection(collectionName).find({"email": email}).toArray();
-        //console.log(docs)
-        let valid;
-        let session;
-        const hash = await bcrypt.hash(pass, SALT_ROUNDS);
-        //console.log(await bcrypt.compare(pass, docs[0].password))
-    
-        if(await bcrypt.compare(pass, docs[0].password)){
-            console.log("Password Correct");
-            let newSession = {"email": docs[0].email, user_id: docs[0]._id, date: Date.now(), valid: true}
-            session = await db.collection('Sessions').insertOne(newSession);
-            valid = true;
-            res.send({"valid": valid, "session": session.insertedId });
-        } else {
-            console.log("Password Wrong");
-            valid=false
-            res.send({"valid": valid});
+
+        try{
+            console.log("mongo signin");
+            let email = req.body.email
+            let pass = req.body.password
+            let db = client.db(dbName);
+            let docs = await db.collection(collectionName).find({"email": email}).toArray();
+            let valid;
+            let session;
+            const compare = await bcrypt.compare(pass, docs[0].password)
+            console.log(compare)
+        
+            if(compare){
+                console.log("Password Correct");
+                let newSession = {"email": docs[0].email, user_id: docs[0]._id, date: Date.now(), valid: true}
+                session = await db.collection('Sessions').insertOne(newSession);
+                valid = true;
+                res.send({"valid": valid, "session": session.insertedId });
+            } else {
+                console.log("Password Wrong");
+                valid=false
+                res.send({"valid": valid});
+            }
+        } catch (err) {
+            console.log(err)
+            res.send({valid:false})
         }
+
     },
 
     sessionLogout: async function(req, res, client, dbName, sessionId) {
@@ -133,7 +139,6 @@ module.exports = {
         await client.connect();
         let db = client.db(dbName);
         let sessionSearch = await db.collection("Sessions").deleteOne({"_id": new ObjectId(sessionId)});
-        //console.log(sessionSearch);
         res.send(sessionSearch);
     },
 
@@ -141,7 +146,6 @@ module.exports = {
         await client.connect();
         console.log("mongo promote user ");
         let db = client.db(dbName); 
-        //console.log(req.body);
         let promoteUserID = req.body.promoteUserID
         let typeOfPromotion = req.body.typeOfPromotion
         result = await db.collection(collectionName).updateOne({_id: new ObjectId(promoteUserID)}, { $addToSet: {roles: `${typeOfPromotion}`} } ); 
@@ -154,7 +158,6 @@ module.exports = {
         let db = client.db(dbName); // 
         await db.collection(collectionName).deleteMany({});
         await db.collection(collectionName).insertMany(seedData);
-        //await client.close();
     },
 
     //Insert New User
@@ -174,7 +177,6 @@ module.exports = {
     let newuserdetails = await db.collection(collectionName).find({"email": doc.email}).toArray();
     console.log("Inserted the below user into collection");
     res.send(dataCleanse(newuserdetails));
-    //client.close();
     },
 
     //Get Userlist
@@ -191,7 +193,6 @@ module.exports = {
             console.error(error);
             res.status(500);
         } finally{
-        //await client.close();
         }
 
     },
@@ -207,17 +208,30 @@ module.exports = {
 
     },
 
-    update: async function(req, res, client) {
+    updateUser: async function(req, res, client, dbName) {
 
-        await client.connect();
-        console.log("mongo update ");
-        let db = client.db("dbName"); 
-        let queryJSON = req.body.query;
-        let updateJSON = req.body.update;
-        result = await db.collection("colName").updateMany(queryJSON, { $set: updateJSON }); 
-        console.log("for the documents with", queryJSON);
-        console.log("SET: ", updateJSON);
-        res.send(result);
+        let updatedUserDetails;
+        try{
+            const query = { _id: new ObjectId(req.body.currentUserID._id)};
+            let update;
+            const options = { upsert: true };
+            console.log(req.body)
+
+            if(req.body.data.password){
+                const hash = await bcrypt.hash(req.body.data.password, SALT_ROUNDS);
+                update = { $set: { email: req.body.data.email, username: req.body.data.username, password: hash}}
+            } else {
+                update = { $set: { email: req.body.data.email, username: req.body.data.username}};
+            }
+
+            let db = client.db(dbName);
+            await db.collection(collectionName).updateOne(query, update, options);
+            updatedUserDetails = {updatedUserDetails: true}
+        } catch (err) {
+            updatedUserDetails = {updatedUserDetails: false, err: err}
+        }
+
+        res.send(updatedUserDetails);
     },
 
     delete: function(req, res, client) {
@@ -227,7 +241,23 @@ module.exports = {
     db.collection("colName").deleteMany(queryJSON);
     console.log("Removed the documents with: ", queryJSON);
     res.send(queryJSON);
+    },
 
+    updateAvatarImage: async function (req,res,client, dbName){
+        console.log(req.body)
+        let updateAvatar;
+        try{
+            const query = { email: req.body.currentUserID.email };
+            const update = { $set: { avatarPath: req.body.path}};
+            const options = { upsert: true };
+    
+            let db = client.db(dbName);
+            await db.collection(collectionName).updateOne(query, update, options);
+            updateAvatar = {updatedAvatar: true}
+        } catch (err) {
+            updateAvatar = {updatedAvatar: false, err: err}
+        }
+        res.send(updateAvatar)
     }
 
 }

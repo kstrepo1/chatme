@@ -34,15 +34,13 @@ export class GroupComponent {
   localsession:any
   approvaltoJoin:boolean = false;
   showAttachmentDiv:boolean = false;
-  chatHistory:any = [{username: "Username",
-                      datetime: 1727940945077,
-                      message: "New Message"
-  }]
+  chatHistory:any = []
 
   socket:any  
   ioConnection:any;
   messagecontent:any = "";
   fileUpload:any;
+  avatar:any;
 
 
   //Constructor uses activated route to determine which user to load. 
@@ -54,7 +52,7 @@ export class GroupComponent {
     private UserService:UserService,
     public SocketioService:SocketioService
   ){
-    this.activatedRoute.params.subscribe(params => this.groupid = params["id"])
+    this.activatedRoute.params.subscribe(params => this.groupid = params["id"]);
   }
 
   ngOnInit(){
@@ -63,10 +61,10 @@ export class GroupComponent {
       try{
         this.localsession =  localStorage.getItem("session");
         this.UserService.sessionValid(this.localsession).subscribe ( (data)=>{
-          // console.log(data);
           if(data.valid){
             this.currentuserinfo = data.userDetails;
             this.curentuserrole = data.userDetails[0].roles;
+            this.avatar = data.userDetails[0].avatarPath;
 
             for(let i=0; i<this.curentuserrole.length; i++){
               if(this.curentuserrole[i]=="SuperAdmin"){
@@ -82,11 +80,6 @@ export class GroupComponent {
             }
             this.currentusergroups = this.currentuserinfo[0].groups;
 
-            // Can Add Channel Check 
-            for( let i = 0; i<this.curentuserrole.length; i++){
-              console.log(this.curentuserrole[i])
-
-            }
 
                 //Join Check
             for(let i=0; i<this.currentusergroups.length; i++){
@@ -96,18 +89,20 @@ export class GroupComponent {
             }
 
           } else {
-            this.router.navigate(['login']);
+            this.router.navigate(['login']); 
           }
 
           this.group.getMessages(this.localsession, this.groupid).subscribe ( (data)=>{
-            console.log(data);
             for(let i=0;i<data.length;i++){
               this.chatHistory.push(data[i].message)
             };
             console.log(this.chatHistory);
           });
+          //Check if user is approved for this group before initatiing sockets
+          if(this.currentUserJoined){
+            this.initIoConnection();
+          }
 
-          this.initIoConnection();
         })
       } catch {
         console.log('error on user component');
@@ -135,8 +130,11 @@ export class GroupComponent {
     .subscribe((message:any) => {
       console.log(message)
       this.chatHistory.unshift(message);
+      //this.SocketioService.join({user:this.currentUserID})
     })
   }
+
+
     
   //Navigate back to groups 
   navgroups(){
@@ -147,15 +145,12 @@ export class GroupComponent {
   addChanel(name:any){
 
     if(this.addingChannel){
-      console.log(this.groupid);
       this.group.addChannel(this.currentuserinfo, this.groupid, name).subscribe(data => {
-        console.log(data);
         if(data.ChannelSuccessAdd){
           this.addingChannel = false;
           this.groupChannels.push(name);
           this.newChannelName = "";
         }
-  
       });
 
     } else {
@@ -165,7 +160,7 @@ export class GroupComponent {
 
 
   }
-
+//Toggles the options button
   toggleOptions(){
     if(this.options){
       this.options = false;
@@ -213,7 +208,8 @@ export class GroupComponent {
         channel: this.channelSelected,
         datetime: new Date(),
         message: this.messagecontent,
-        image: false
+        image: false,
+        avatar: this.avatar
 
       }
       this.SocketioService.send(transmission)
@@ -227,10 +223,6 @@ export class GroupComponent {
     formData.append('file', this.fileUpload)
     console.log(formData)
 
-
-
-
-
     this.group.sendImage(formData).subscribe(
       (res) => {console.log(res)
         let transmission =   {
@@ -243,7 +235,8 @@ export class GroupComponent {
           image: true,
           fileOriginalName: res.originalname,
           filename: res.filename,
-          path: res.path
+          path: res.path,
+          avatar: this.avatar
         }
 
         this.SocketioService.send(transmission);
@@ -267,6 +260,7 @@ export class GroupComponent {
     this.fileUpload = event.target.files[0];
     console.log(event);
   }
+
 
 
 }

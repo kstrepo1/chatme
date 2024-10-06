@@ -19,7 +19,8 @@ export class AppComponent {
   validuser:boolean = false;
   canSeeRequests:boolean = false;
   currentuserrole:any;
-  localsession:any
+  localsession:any;
+  avatar:any;
 
   constructor (
     private router:Router,
@@ -40,6 +41,7 @@ export class AppComponent {
               this.credentials = data.userDetails;
               this.username = data.userDetails[0].username
               this.currentuserrole = data.userDetails[0].roles;
+              this.avatar = data.userDetails[0].avatarPath;
 
               for(let i=0; i<this.currentuserrole[0].length; i++){
                 if(this.currentuserrole[i]=="SuperAdmin"){

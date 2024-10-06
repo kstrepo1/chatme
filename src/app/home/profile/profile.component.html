@@ -1,28 +1,47 @@
 <div id="profile">
     <h1>Profile Information</h1>
+
+    @if(avatar){
+        <img src="http://localhost:3001/{{avatar}}"class="avatarimage">
+    } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+          </svg>
+        }
+
+@if(avatarUpdateButton){
+    &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-dark" (click)="updateAvatarButton();">Update Avatar</button> <br><br>
+} @else {
+    <br><br>
+    @if(!fileUploaded){
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" id="inputGroupFile02" accept="image/png, image/jpeg" (change)="onFileChange($event)">
+            <label class="input-group-text" (click)="sendFile()">Upload</label>
+          </div>
+        <br>
+    
+        } @else {
+            File Selected: {{fileUploadedName}}
+            <img src="http://localhost:3001/{{fileUploadedPath}}" height="100" width="100">
+        
+}}
+
 <form>
-    <label for="email">Email: </label><br>
-    <input type="text" id="email" [(ngModel)]="email" name="email"><br>
-    <label for="username">Username: </label><br>
-    <input type="text" id="username" [(ngModel)]="username" name="username"><br>
-    <label for="password">Password: </label><br>
-    <input type="text" id="email" placeholder="Update Password?"><br>
+    <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="email" class="form-control" id="username" [(ngModel)]="username" name="username" required>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" [(ngModel)]="email" name="email" required>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" [(ngModel)]="password" name="password" placeholder="Update Password?">
+    </div>
 </form><br>
-<button>Update</button>
-<br><br>
-
-<!-- <h5>Roles: </h5>
-<br>
-@for(role of roles; track roles.role; ){
-    {{role}} <br>
-}
-
-<br>
-<h5>Groups: </h5>
-
-@for(group of groups; track groups.group ){
-    {{group}} <br>
-} -->
+<button class="btn btn-info" (click)="updateUserInfo()">Update</button>
 <br><br>
 <button type="button" class="btn btn-outline-danger">Delete My Account</button>
 

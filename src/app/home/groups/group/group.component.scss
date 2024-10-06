@@ -1,6 +1,6 @@
 #groupdiv{
     padding:1rem;
-    margin-left:20vw;
+    margin-left:250px;
     width:80vw;
     border-bottom: 1px solid #000;
     height: 15vh;
@@ -15,9 +15,9 @@
 #channeldiv{
     width:20vw;
     padding:2rem;
-    margin-left:20vw;
     border-right:1px solid #000;
     height: 85vh;
+    margin-left: 250px;
 }
 
 #chatdiv{
@@ -38,7 +38,7 @@
 #chatbox{
     position: fixed;
     bottom:1rem;
-    width:500px;
+    width:50vw;
 }
 
 #chatbubble{
@@ -46,6 +46,7 @@
     border-radius: 0.5rem;
     margin: 0.5rem;
     padding: 0.3rem;
+    max-width: 47vw;
     //width: 45vw;
 }
 
@@ -60,6 +61,7 @@ h2{
 }
 
 .chatImage{
-    max-width: 47vw;
+    max-width: 44vw;
     height:auto;
+    margin:1rem;
 }

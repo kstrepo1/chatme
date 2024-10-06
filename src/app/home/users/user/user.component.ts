@@ -26,6 +26,7 @@ export class UserComponent {
   promoteusergroupadmin:any = false;
   deleteuseravailable:boolean = false;
   usergroups:any;
+  uploadedFile:Boolean = false;
 
   //Constructor uses activated route to determine which user to load. 
   constructor(

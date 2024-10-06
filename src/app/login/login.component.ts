@@ -51,11 +51,7 @@ export class LoginComponent {
   }
 
   signin(){
-    console.log(this.emailaddress, this.password);
     this.userService.login(this.emailaddress, this.password).subscribe( (data)=>{
-      console.log('login data from proxy');
-      console.log(data)
-      
       if(data.valid){
         localStorage.setItem("session", data.session);
         window.location.replace("/home");
@@ -63,7 +59,5 @@ export class LoginComponent {
         this.error="Sign Error, Please Try Again"
       }
     })
-
   }
-
 }

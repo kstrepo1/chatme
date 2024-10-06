@@ -51,4 +51,12 @@ export class UserService {
     return this.http.post<any>('http://localhost:3001/api/promoteUser', {currentUserID:currentUserID, promoteUserID: promoteUserID, typeOfPromotion:typeOfPromotion})
   }
 
+  updateAvatarImage(currentUserID:any, path:any){
+    return this.http.post<any>('http://localhost:3001/api/updateAvatarImage', {currentUserID:currentUserID, path: path})
+  }
+
+  updateUserDetails(currentUserID:any, data:any){
+    return this.http.post<any>('http://localhost:3001/api/updateUser', {currentUserID:currentUserID, data: data })
+  }
+
 }
