@@ -77,5 +77,17 @@ export class AppComponent {
     }
   }
 
+  groups(){
+    this.router.navigateByUrl('/groups')
+  }
+
+  users(){
+    this.router.navigate(["users"])
+  }
+
+  requests(){
+    this.router.navigate(['requests'])
+  }
+
 
 }

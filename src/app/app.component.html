@@ -35,26 +35,26 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto" *ngIf="validuser==true;" id="signedinOptions">
       <li class="nav-item">
-        <a href="/home" class="nav-link text-white" aria-current="page">
+        <a (click)="groups()" class="nav-link text-white" aria-current="page">
           <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
           Home
         </a>
       </li>
       <li>
-        <a href="/groups" class="nav-link text-white">
+        <a (click)="groups()" class="nav-link text-white">
           <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
           Groups
         </a>
       </li>
       <li>
-        <a href="/users" class="nav-link text-white">
+        <a (click)="users()" class="nav-link text-white">
           <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
           Users
         </a>
       </li>
       @if(canSeeRequests){
         <li>
-          <a href="/requests" class="nav-link text-white">
+          <a (click)="requests()" class="nav-link text-white">
             <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#approval-icon"/></svg>
             Requests
           </a>

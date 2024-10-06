@@ -50,7 +50,7 @@ export class GroupComponent {
     private group:GroupService,
     @Inject(PLATFORM_ID) private platformID: object,
     private UserService:UserService,
-    public SocketioService:SocketioService
+    public SocketioService:SocketioService,
   ){
     this.activatedRoute.params.subscribe(params => this.groupid = params["id"]);
   }
@@ -261,6 +261,11 @@ export class GroupComponent {
     console.log(event);
   }
 
+  requestToJoinGroup(){
+    console.log(this.currentuserinfo);
+    console.log(this.groupid);
+
+  }
 
 
 }
