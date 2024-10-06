@@ -42,6 +42,7 @@ export class GroupComponent {
 
   socket:any  
   ioConnection:any;
+  ioConnection2:any;
   messagecontent:any = "";
   fileUpload:any;
   avatar:any;
@@ -114,7 +115,7 @@ export class GroupComponent {
       } catch {
         console.log('error on user component');
         this.curentuserrole= [];
-      }
+      } 
     }
 
 
@@ -128,10 +129,22 @@ export class GroupComponent {
     this.SocketioService.initSocket();
     this.ioConnection = this.SocketioService.onMessage()
     .subscribe((message:any) => {
+      console.log(message)
       this.chatHistory.unshift(message);
+      console.log(this.chatHistory)
     })
-    this.SocketioService.onJoin().subscribe((join) => {
-      this.groupJoinToastActivate(join)
+    this.ioConnection2 = this.SocketioService.onJoin()
+    .subscribe((joinMessage:any) => {
+      setTimeout(()=>{
+        console.log(joinMessage)
+        console.log(this.groupid);
+        console.log(joinMessage.groupid)
+        if(joinMessage.user != this.currentuserinfo[0].username){
+          if(joinMessage.groupid === this.groupid){
+            this.groupJoinToastActivate(joinMessage)
+          }
+        }
+      },1500)
     })
   }
 
@@ -141,7 +154,7 @@ export class GroupComponent {
     this.router.navigate(['groups'])
   }
 
-  async getGrouplist(){
+  getGrouplist(){
     this.group.getGroupList(this.localsession).subscribe((data)=>{
       this.groupName = data[this.groupid].groupname;
       this.groupChannels = data[this.groupid].channels;
@@ -277,13 +290,6 @@ export class GroupComponent {
   }
 
   groupJoinToastActivate(data:any){
-    console.log()
-    if(data.groupid == this.groupid && data.user !=this.currentuserinfo[0].username){
     this.toastr.info(data.user + ' Has Joined ');
-    }
-
   }
-
-
-
 }

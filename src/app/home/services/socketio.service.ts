@@ -24,13 +24,11 @@ export class SocketioService {
     this.socket.emit('message', message);
   }
 
-  // image(message:any){
-  //   this.socket.emit('image', message);
-  // }
 
   join(message:any){
     this.socket.emit('join', message);
   }
+
 
   //Get Message
   onMessage(){
@@ -48,6 +46,8 @@ export class SocketioService {
       })
     })
   }
+
+
 
 
 }
