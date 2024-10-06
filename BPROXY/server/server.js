@@ -14,13 +14,25 @@ const app = express(),
         }
         }),
     { MongoClient, ObjectId} = require('mongodb'),
-    client = new MongoClient(url);
+    client = new MongoClient(url),
+    multer = require('multer')
 
 const sockets = require('./App/sockets.js');
-const server = require ('./listen.js');
+const server = require ('./App/listen.js');
 const users = require('./App/user_operations.js')
 const groups = require('./App/group_operations.js')
 
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './uploads/')
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.fieldname + '-' + uniqueSuffix + '.' + file.mimetype[6]+ file.mimetype[7] + file.mimetype[8])
+    }
+  })
+  const upload = multer({storage: storage});
 //Express cors middleware
 app.use(cors());
 app.use(bodyParser.json()); 
@@ -60,6 +72,9 @@ app.post('/api/leaveGroup', (req,res) => groups.leaveGroup(req, res, client, dbN
 app.post('/api/deleteGroup', (req,res) => groups.deleteGroup(req, res, client, dbName));
 app.post('/api/addChannel', (req,res) => groups.addChannel(req, res, client, dbName));
 app.post('/api/getChats', (req,res) => groups.getMessages(req, res, client, dbName));
+app.post('/api/fileSend', upload.single('file'), (req,res, next)=> groups.fileSend(req,res,next));
+
+app.get('/uploads/:name',(req, res) => groups.getImage(req, res));
 
 //Socket Setup
 sockets.connect(io, PORT);

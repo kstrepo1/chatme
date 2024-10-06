@@ -1,15 +1,21 @@
 #groupdiv{
     padding:1rem;
-    margin-left:280px;
+    margin-left:20vw;
     width:80vw;
     border-bottom: 1px solid #000;
+    height: 15vh;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: baseline;
 
 }
 
 #channeldiv{
-    width:200px;
-    padding:1rem;
-    margin-left:290px;
+    width:20vw;
+    padding:2rem;
+    margin-left:20vw;
     border-right:1px solid #000;
     height: 85vh;
 }
@@ -17,16 +23,43 @@
 #chatdiv{
     padding:1rem;
     width: 50vh;
+}
 
+.chatmessages{
+    position: static;
+    bottom: 0;
+    height: 65vh;
+    width: 50vw;
+    overflow:auto;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 #chatbox{
     position: fixed;
     bottom:1rem;
-    width:400px;
+    width:500px;
+}
+
+#chatbubble{
+    border:#4a4a4a solid 1px;
+    border-radius: 0.5rem;
+    margin: 0.5rem;
+    padding: 0.3rem;
+    //width: 45vw;
 }
 
 #joinMessage{
     margin-left: 300px;
     margin-top:20px;
+
+}
+
+h2{
+    margin: 1rem;
+}
+
+.chatImage{
+    max-width: 47vw;
+    height:auto;
 }

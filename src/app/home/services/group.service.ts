@@ -35,4 +35,8 @@ export class GroupService {
   getMessages(searchUserID:any, groupID:any){
     return this.http.post<any>('http://localhost:3001/api/getChats', {searchUserID: searchUserID, groupID: groupID })
   }
+
+  sendImage(formData:any){
+    return this.http.post<any>('http://localhost:3001/api/fileSend', formData)
+  }
 }

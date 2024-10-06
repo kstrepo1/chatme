@@ -1,6 +1,5 @@
-const {
-    ObjectId
-} = require('mongodb');
+const { ObjectId } = require('mongodb'), 
+path = require('path')
 
 const collectionName = "Groups"
 
@@ -34,7 +33,7 @@ module.exports = {
             console.log("mongo getMessages");
             let gID = req.body.groupID
             let db = client.db(dbName);
-            let docs = await db.collection("Chats").find({'message.groupID':gID}).toArray();
+            let docs = await db.collection("Chats").find({'message.groupID':gID}, {sort: { "message.datetime": -1 }}).toArray();
             res.send(docs);
         } catch (error){
             console.error(error);
@@ -149,6 +148,33 @@ module.exports = {
             console.error(error);
         } 
 
-    }
+    },
 
+    fileSend: async function (req, res, next){
+        const file = req.file;
+        if (!file){
+            const error = new Error('please upload file')
+            error.httpStatusCode = 400
+            return next(error)
+        }
+        res.send(file)
+    },
+
+    getImage: async function(req,res, next){
+        var options = {
+            root: path.join(__dirname, '../uploads'),
+            dotfiles: 'deny',
+            headers: {
+              'x-timestamp': Date.now(),
+              'x-sent': true
+            }
+          }
+        
+          var fileName = req.params.name
+          res.sendFile(fileName, options, function (err) {
+            if (err) {
+              next(err)
+            } 
+          })
+    }
 }

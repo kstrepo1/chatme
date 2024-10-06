@@ -1,6 +1,6 @@
 <div id="groupdiv">
         
-    <h2>{{groupName}}</h2>
+    <h2>{{groupName}}</h2> &nbsp; 
     <button type="button" class="btn btn-info btn-sm" (click)="navgroups()">All Groups</button> &nbsp;
 @if(!currentUserJoined && !approvaltoJoin){
     <button type="button" class="btn btn-info btn-sm" (click)="joinGroup()">Join</button> &nbsp;
@@ -64,20 +64,41 @@
     <div id="chatdiv"class="col-9">
         <h4>{{channelSelected}} Chat &nbsp; </h4>
 
-        <div id="chatbubble">
+        <div class="chatmessages">
+        
             @for(chat of chatHistory; track chat){
                 @if(chat.groupID == groupid && chat.channel == channelSelected){
-                {{chat.username}}: {{chat.message}}<br>
+                    <div id="chatbubble">
+                {{chat.username}}:@if(chat.image){
+                        <img src="http://localhost:3001/{{chat.path}}" alt="{{chat.filename}}"class="chatImage">
+                }
+                {{chat.message}}<br>
+                    </div>
                 }
             }
         </div>
+        
 
 
         <div class="row">
             <div class="input-group" id="chatbox">
+                @if (showAttachmentDiv == false){
                 <textarea class="form-control" aria-label="With textarea" name="messagecontent" [(ngModel)]="messagecontent"></textarea>
                 <button class="btn btn-outline-primary" type="button" id="button-addon2" (click)="sendMessage()">Send</button>
+                <button class="btn btn-outline-primary" type="button" id="button-addon2" (click)="attachFile()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
+                    <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z"/>
+                  </svg></button>
+                } @else {
+                    
+                    <input type="file" class="form-control" id="inputGroupFile02" accept="image/png, image/jpeg" (change)="onFileChange($event)">
+                    <button class="btn btn-outline-primary" type="button" id="button-addon2" (click)="sendFile()" >Send</button>
+                    <button class="btn btn-outline-primary" type="button" id="button-addon2" (click)="attachFile()" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                      </svg></button>
+                }
             </div>
+            
         </div>
 
     </div>

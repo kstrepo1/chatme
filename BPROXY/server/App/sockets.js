@@ -29,6 +29,13 @@ module.exports = {
                 io.emit('message', message);
                      
             });
+
+            
+            socket.on('image', async (imageData)=>{
+            console.log(imageData)
+                //io.emit('message', message);
+                     
+            });
         })
     }
 }

@@ -33,6 +33,7 @@ export class GroupComponent {
   channelSelected:any;
   localsession:any
   approvaltoJoin:boolean = false;
+  showAttachmentDiv:boolean = false;
   chatHistory:any = [{username: "Username",
                       datetime: 1727940945077,
                       message: "New Message"
@@ -41,6 +42,7 @@ export class GroupComponent {
   socket:any  
   ioConnection:any;
   messagecontent:any = "";
+  fileUpload:any;
 
 
   //Constructor uses activated route to determine which user to load. 
@@ -132,7 +134,7 @@ export class GroupComponent {
     this.ioConnection = this.SocketioService.onMessage()
     .subscribe((message:any) => {
       console.log(message)
-      this.chatHistory.push(message);
+      this.chatHistory.unshift(message);
     })
   }
     
@@ -210,11 +212,60 @@ export class GroupComponent {
         groupName: this.groupName,
         channel: this.channelSelected,
         datetime: new Date(),
-        message: this.messagecontent
+        message: this.messagecontent,
+        image: false
+
       }
       this.SocketioService.send(transmission)
       this.messagecontent="";
+      this.fileUpload=null;
     } 
+  }
+
+  sendFile(){
+    const formData = new FormData();
+    formData.append('file', this.fileUpload)
+    console.log(formData)
+
+
+
+
+
+    this.group.sendImage(formData).subscribe(
+      (res) => {console.log(res)
+        let transmission =   {
+          username: this.currentuserinfo[0].username,
+          _id: this.currentuserinfo[0]._id,
+          groupID: this.groupid,
+          groupName: this.groupName,
+          channel: this.channelSelected,
+          datetime: new Date(),
+          image: true,
+          fileOriginalName: res.originalname,
+          filename: res.filename,
+          path: res.path
+        }
+
+        this.SocketioService.send(transmission);
+        this.attachFile()
+      },
+      (err) => console.log(err)
+    )
+
+  }
+
+  attachFile(){
+    if(this.showAttachmentDiv){
+      this.showAttachmentDiv = false
+      this.fileUpload = null;
+    } else {
+      this.showAttachmentDiv = true
+    }
+  }
+
+  onFileChange(event:any){
+    this.fileUpload = event.target.files[0];
+    console.log(event);
   }
 
 

@@ -11,6 +11,8 @@
 npm-debug.log
 yarn-error.log
 /A_PROXY/node_modules
+/BPROXY/server/uploads
+/BPROXY/server/node_modules
 
 # IDEs and editors
 .idea/

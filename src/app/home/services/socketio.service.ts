@@ -24,11 +24,16 @@ export class SocketioService {
     this.socket.emit('message', message);
   }
 
+  image(message:any){
+    this.socket.emit('image', message);
+  }
+
   //Get Message
   onMessage(){
     return new Observable(observer=>{
       this.socket.on('message', (data:any) =>{
         observer.next(data);
+        console.log(data)
       })
     })
   }
