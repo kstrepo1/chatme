@@ -63,13 +63,12 @@ app.post('/test', (req,res) => res.send(req.body));
 //Routes
 // ----------- USERS ------------
 app.post('/api/adduser',(req, res) => users.insert(req, res, client, dbName));
-app.get('/api/getUserList', (req, res) => users.userList(req, res, client, dbName, ));
+app.get('/api/getUserList', (req, res) => users.userList(req, res, client, dbName));
 app.get('/api/getUser/:id', (req, res) => {const user_id = req.params.id; users.userLookup(user_id, res, client, dbName)});
 app.post('/api/promoteUser', (req, res) => users.promoteUser(req, res, client, dbName));
 app.delete('/api/sessionlogout/:id', (req, res) => { const sessionId = req.params.id;
-    users.sessionLogout(req, res, client, dbName, sessionId);
-});
-app.post('/api/updateUser', (req,res)=> users.updateUser(req,res,client,dbName))
+    users.sessionLogout(req, res, client, dbName, sessionId)});
+app.put('/api/updateUser', (req,res)=> users.updateUser(req,res,client,dbName))
 app.put('/api/updateAvatarImage', (req,res)=> users.updateAvatarImage(req,res,client,dbName))
 
 
@@ -80,15 +79,19 @@ app.post('/api/session', (req, res) => users.sessionInfo(req, res, client, dbNam
 //Sign out
 
 // -------- GROUPS -------------
-app.post('/api/getGroups', (req,res) => groups.groupList(req, res, client, dbName));
+app.get('/api/getGroups', (req,res) => groups.groupList(req, res, client, dbName));
 app.post('/api/createGroup', (req,res) => groups.addNewGroup(req, res, client, dbName));
 app.post('/api/joinGroup', (req,res) => groups.joinGroup(req, res, client, dbName));
 app.post('/api/leaveGroup', (req,res) => groups.leaveGroup(req, res, client, dbName));
 app.post('/api/deleteGroup', (req,res) => groups.deleteGroup(req, res, client, dbName));
 app.post('/api/addChannel', (req,res) => groups.addChannel(req, res, client, dbName));
 app.post('/api/getChats', (req,res) => groups.getMessages(req, res, client, dbName));
-app.post('/api/fileSend', upload.single('file'), (req,res, next)=> groups.fileSend(req,res,next));
+app.get('/api/approvalList', (req,res) => { groups.getApprovals(req, res, client, dbName)});
+app.post('/api/requestApprovalToJoinGroup', (req,res) => groups.requestApprovalToJoin(req, res, client, dbName))
+app.delete('/api/declineapproval/:id', (req, res) => { const approvalID = req.params.id;
+  groups.declineApproval(req, res, client, dbName, approvalID)});
 
+app.post('/api/fileSend', upload.single('file'), (req,res, next)=> groups.fileSend(req,res,next));
 app.get('/uploads/:name',(req, res) => groups.getImage(req, res));
 
 //Socket Setup

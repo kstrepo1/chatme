@@ -41,8 +41,14 @@
         <input type="password" class="form-control" id="password" [(ngModel)]="password" name="password" placeholder="Update Password?">
     </div>
 </form><br>
+
+
+
 <button class="btn btn-info" (click)="updateUserInfo()">Update</button>
 <br><br>
 <button type="button" class="btn btn-outline-danger">Delete My Account</button>
-
+<br><br>
+@if(successfullUpdate){
+    <b>Successfully Updated Information</b>
+}
 </div>

@@ -75,7 +75,7 @@ export class UserComponent {
     
         //Checks user groups that viewed user belongs to for showing on view. 
         this.usergroups = [];
-        this.group.getGroupList(localsession).subscribe((data)=>{
+        this.group.getGroupList().subscribe((data)=>{
           let fullgrouplist = data
           console.log(this.userinfo.groups);
           for(let a=0; a<this.userinfo.groups.length; a++){

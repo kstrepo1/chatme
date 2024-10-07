@@ -1,23 +1,12 @@
 <div id="requests">
 
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">James is requesting to join Group 1 &nbsp;
-            <button type="button" class="btn btn-outline-success">Approve</button>&nbsp;
-            <button type="button" class="btn btn-outline-danger">Decline</button>
-        </li>
-        <li class="list-group-item">Sarah is requesting to join Group 2 &nbsp;
-            <button type="button" class="btn btn-outline-success">Approve</button>&nbsp;
-            <button type="button" class="btn btn-outline-danger">Decline</button>
-        </li>
-        <li class="list-group-item">Henry is requesting to join Group 1 &nbsp;
-            <button type="button" class="btn btn-outline-success">Approve</button>&nbsp;
-            <button type="button" class="btn btn-outline-danger">Decline</button>
-        </li>
-        <li class="list-group-item">Maddy is requesting promotion to Group Admin for Group 1 &nbsp;
-            <button type="button" class="btn btn-outline-success">Approve</button>&nbsp;
-            <button type="button" class="btn btn-outline-danger">Decline</button>
-        </li>
+        @for(list of approvalListCleaned; track list){
+            <li class="list-group-item">{{list.username}} is requesting to join {{list.groupName}} &nbsp;<br>
+                <button type="button" class="btn btn-outline-success" (click)="approveGroupEntry(list.userId, list.groupID)">Approve</button>&nbsp;
+                <button type="button" class="btn btn-outline-danger" (click)="declineApproval(list.approvalId)">Decline</button>
+            </li>
+        }
     </ul>
-
 </div>
 

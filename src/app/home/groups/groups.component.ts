@@ -42,7 +42,7 @@ export class GroupsComponent {
           }
           
 
-        this.groups.getGroupList(this.localsession).subscribe((data:any)=>{
+        this.groups.getGroupList().subscribe((data:any)=>{
           this.grouplist = data
           console.log(data)
     

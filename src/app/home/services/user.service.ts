@@ -42,7 +42,7 @@ export class UserService {
   }
 
   updateUserDetails(currentUserID:any, data:any){
-    return this.http.post<any>('http://localhost:3001/api/updateUser', {currentUserID:currentUserID, data: data })
+    return this.http.put<any>('http://localhost:3001/api/updateUser', {currentUserID:currentUserID, data: data })
   }
 
 }

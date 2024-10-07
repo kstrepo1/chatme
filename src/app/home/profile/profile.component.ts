@@ -31,6 +31,7 @@ export class ProfileComponent {
   fileUploadedName:any = "";
   fileUploadedPath:any;
   avatarUpdateButton:boolean = true;
+  successfullUpdate:any;
 
   //Constructor uses activated route to determine which user to load. 
   constructor(
@@ -103,7 +104,11 @@ export class ProfileComponent {
     }
     this.UserService.updateUserDetails(this.userinfo, data).subscribe((res=>{
       console.log(res);
-      //location.reload();
+      if(res.updatedUserDetails){
+      this.successfullUpdate = true
+      } else {
+        this.successfullUpdate = false
+      }
     }))
   }
 

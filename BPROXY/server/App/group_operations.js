@@ -59,13 +59,57 @@ module.exports = {
 
     },
 
+    requestApprovalToJoin: async function(req, res, client, dbName) {
+        try{
+            console.log("mongo Approval to join");
+            let db = client.db(dbName);
+            let newGroup = {userID: req.body.userID, groupID: req.body.groupID}
+            let request = await db.collection("ApprovalRequests").updateOne(newGroup, {$set: newGroup}, {upsert:true});
+            res.send({requestedApproval:true, request:request});
+        } catch (error){
+            console.error(error);
+            res.status(500);
+        } 
+    },
+
+    getApprovals: async function(req, res, client, dbName) {
+        try{
+            console.log("mongo get approvals to join groups");
+            let db = client.db(dbName);
+            let request = await db.collection("ApprovalRequests").find({}).toArray();
+            res.send(request);
+        } catch (error){
+            console.error(error);
+            res.status(500);
+        } 
+    },
+
+    declineApproval: async function (req, res, client, dbName, approvalID){
+        try{
+            console.log("Mongo Decline Approval");
+            let db = client.db(dbName);
+            console.log(approvalID)
+            await db.collection("ApprovalRequests").deleteOne({_id: new ObjectId(approvalID)})
+            res.send({"approvalDeclined":true});
+
+        } catch (error){
+            console.error(error);
+            res.status(500);
+        } 
+    },
+
+
+
     joinGroup: async function(req, res, client, dbName) {
 
         try{
             await client.connect();
             console.log("mongo Join Group");
             let db = client.db(dbName);
-            await db.collection("Users").updateOne({"_id": new ObjectId(req.body.searchUserID[0]._id)}, {$addToSet: {groups: req.body.groupID}})
+            console.log(req.body)
+            let removeApproval = await db.collection("ApprovalRequests").deleteOne({userID: req.body._id, groupID: req.body.groupID});
+            console.log(removeApproval)
+            await db.collection("Users").updateOne({"_id": new ObjectId(req.body._id)}, {$addToSet: {groups: req.body.groupID}})
             res.send({successGroupJoin:true});
         } catch (error){
             console.error(error);

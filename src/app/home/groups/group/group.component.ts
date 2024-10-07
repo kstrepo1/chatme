@@ -148,7 +148,7 @@ peer:any;
       this.chatHistory.unshift(message);
       console.log(this.chatHistory)
     });
-    
+
     this.ioConnection2 = this.SocketioService.onJoin()
     .subscribe((joinMessage:any) => {
       setTimeout(()=>{
@@ -171,7 +171,7 @@ peer:any;
   }
 
   getGrouplist(){
-    this.group.getGroupList(this.localsession).subscribe((data)=>{
+    this.group.getGroupList().subscribe((data)=>{
       this.groupName = data[this.groupid].groupname;
       this.groupChannels = data[this.groupid].channels;
       this.channelSelected=this.groupChannels[0];
@@ -212,7 +212,7 @@ peer:any;
   }
 
   joinGroup(){
-    this.group.joinGroup(this.currentuserinfo, this.groupid,).subscribe(data => {
+    this.group.joinGroup(this.currentuserinfo[0]._id, this.groupid,).subscribe(data => {
       console.log(data);
       location.reload();
     });
@@ -300,9 +300,13 @@ peer:any;
   }
 
   requestToJoinGroup(){
-    console.log(this.currentuserinfo);
-    console.log(this.groupid);
-    this.toastr.success('Approval Requested' );
+    let request = {userID: this.currentuserinfo[0]._id, groupID: this.groupid}
+    this.group.requestApprovalToJoin(request).subscribe((data)=> {
+      console.log(data);
+      if(data.requestedApproval){
+        this.toastr.success('Approval Requested');
+      }
+    })
   }
 
   groupJoinToastActivate(data:any){
