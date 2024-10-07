@@ -13,12 +13,12 @@ export class UserService {
     return this.http.post<any>('http://localhost:3001/api/adduser', {userDetails: user})
   }
 
-  getUserList(currentUser:any){
-    return this.http.post<any>('http://localhost:3001/api/getUserList', {currentUserID: currentUser})
+  getUserList(){
+    return this.http.get<any>('http://localhost:3001/api/getUserList')
   }
 
-  getUserInfo(currentUser:any, userID:any){
-    return this.http.post<any>('http://localhost:3001/api/getUser', {currentUserID: currentUser, searchUserID: userID})
+  getUserInfo(userID:any){
+    return this.http.get<any>(`http://localhost:3001/api/getUser/${userID}`)
   }
 
   login(email:any, password:any){
@@ -33,26 +33,12 @@ export class UserService {
     return this.http.delete(`http://localhost:3001/api/sessionlogout/${sessionId}`)
   }
 
-  getGroupUserlist(groupid:any, currentUser:any): Observable<any[]>{
-    return this.http.post<any>('http://localhost:3001/api/getUserList', {currentUserID: currentUser}).pipe( 
-      map(fulluserlist => {
-        let matchedusers = []
-        for (let user of fulluserlist){
-          if(user.groups.includes(groupid)){
-            matchedusers.push(user);
-          }
-        }
-        return matchedusers
-      })
-    )
-  }
-
   promoteUser(currentUserID:any, promoteUserID:any, typeOfPromotion:any){
     return this.http.post<any>('http://localhost:3001/api/promoteUser', {currentUserID:currentUserID, promoteUserID: promoteUserID, typeOfPromotion:typeOfPromotion})
   }
 
   updateAvatarImage(currentUserID:any, path:any){
-    return this.http.post<any>('http://localhost:3001/api/updateAvatarImage', {currentUserID:currentUserID, path: path})
+    return this.http.put<any>('http://localhost:3001/api/updateAvatarImage', {currentUserID:currentUserID, path: path})
   }
 
   updateUserDetails(currentUserID:any, data:any){

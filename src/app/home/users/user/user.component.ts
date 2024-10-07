@@ -41,7 +41,7 @@ export class UserComponent {
 
   ngOnInit(){
 
-    this.UserService.getUserInfo(1,this.userid).subscribe( (data)=>{
+    this.UserService.getUserInfo(this.userid).subscribe( (data)=>{
       this.userinfo = data[0]
     })
 

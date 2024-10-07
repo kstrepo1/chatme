@@ -7,6 +7,8 @@ import { GroupService } from '../../services/group.service';
 import { UserService } from '../../services/user.service';
 import { SocketioService } from '../../services/socketio.service';
 import { ToastrService } from 'ngx-toastr';
+import { Peer } from "peerjs"
+import { map } from 'rxjs';
 
 
 @Component({
@@ -46,6 +48,8 @@ export class GroupComponent {
   messagecontent:any = "";
   fileUpload:any;
   avatar:any;
+peer:any;
+
 
 
   //Constructor uses activated route to determine which user to load. 
@@ -67,6 +71,7 @@ export class GroupComponent {
     if(isPlatformBrowser(this.platformID)){
       try{
         this.localsession =  localStorage.getItem("session");
+        this.peer = new Peer(this.localsession);
         this.UserService.sessionValid(this.localsession).subscribe ( (data)=>{
           if(data.valid){
             this.currentuserinfo = data.userDetails;
@@ -119,9 +124,19 @@ export class GroupComponent {
     }
 
 
-    this.UserService.getGroupUserlist(this.groupid, this.localsession).subscribe(matchedUsers => {
+    this.UserService.getUserList().subscribe((data) => {
+      let matchedUsers = [];
+      
+      for (let user of data) {
+        if (user.groups.includes(this.groupid)) {
+          matchedUsers.push(user);
+        }
+      }
+      
       this.groupMembers = matchedUsers;
     });
+
+
     
   }
 
@@ -132,7 +147,8 @@ export class GroupComponent {
       console.log(message)
       this.chatHistory.unshift(message);
       console.log(this.chatHistory)
-    })
+    });
+    
     this.ioConnection2 = this.SocketioService.onJoin()
     .subscribe((joinMessage:any) => {
       setTimeout(()=>{

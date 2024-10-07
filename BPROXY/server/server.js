@@ -20,7 +20,11 @@ const app = express(),
 const sockets = require('./App/sockets.js');
 const server = require ('./App/listen.js');
 const users = require('./App/user_operations.js')
-const groups = require('./App/group_operations.js')
+const groups = require('./App/group_operations.js');
+
+const { PeerServer } = require("peer");
+
+//PeerServer({ port: 9000, path: "/myapp" });
 
 
 const storage = multer.diskStorage({
@@ -59,14 +63,14 @@ app.post('/test', (req,res) => res.send(req.body));
 //Routes
 // ----------- USERS ------------
 app.post('/api/adduser',(req, res) => users.insert(req, res, client, dbName));
-app.post('/api/getUserList', (req, res) => users.userList(req, res, client, dbName));
-app.post('/api/getUser', (req, res) => users.userLookup(req, res, client, dbName));
+app.get('/api/getUserList', (req, res) => users.userList(req, res, client, dbName, ));
+app.get('/api/getUser/:id', (req, res) => {const user_id = req.params.id; users.userLookup(user_id, res, client, dbName)});
 app.post('/api/promoteUser', (req, res) => users.promoteUser(req, res, client, dbName));
 app.delete('/api/sessionlogout/:id', (req, res) => { const sessionId = req.params.id;
     users.sessionLogout(req, res, client, dbName, sessionId);
 });
 app.post('/api/updateUser', (req,res)=> users.updateUser(req,res,client,dbName))
-app.post('/api/updateAvatarImage', (req,res)=> users.updateAvatarImage(req,res,client,dbName))
+app.put('/api/updateAvatarImage', (req,res)=> users.updateAvatarImage(req,res,client,dbName))
 
 
 //Sign In

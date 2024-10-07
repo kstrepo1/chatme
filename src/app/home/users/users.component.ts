@@ -44,7 +44,7 @@ export class UsersComponent {
     }
     
 
-    this.UserService.getUserList(this.credcheck).subscribe( (data)=>{
+    this.UserService.getUserList().subscribe( (data)=>{
       this.userlist = data;
       console.log(this.userlist)
     });

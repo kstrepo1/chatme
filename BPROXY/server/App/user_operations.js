@@ -198,14 +198,18 @@ module.exports = {
     },
 
     //Lookup user data
-    userLookup: async function(req, res, client, dbName) {
+    userLookup: async function(user_id, res, client, dbName) {
+        try{
         await client.connect();
         console.log("mongo userlist");
         let db = client.db(dbName);
-        //console.log(req.body.searchUserID)
-        const docs = await db.collection(collectionName).find({"_id": new ObjectId(req.body.searchUserID)}).toArray()
+        const docs = await db.collection(collectionName).find({"_id": new ObjectId(user_id)}).toArray()
         res.send(dataCleanse(docs));
-
+        } catch (err) {
+            console.log(err)
+            console.log(user_id)
+            res.send('Error with userlookup request')
+        }
     },
 
     updateUser: async function(req, res, client, dbName) {

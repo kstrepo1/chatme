@@ -35,6 +35,7 @@ export class SocketioService {
     return new Observable(observer=>{
       this.socket.on('message', (data:any) =>{
         console.log(data)
+        observer.next(data)
       })
     })
   }
