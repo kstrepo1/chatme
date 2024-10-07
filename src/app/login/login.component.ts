@@ -56,7 +56,7 @@ export class LoginComponent {
         localStorage.setItem("session", data.session);
         window.location.replace("/home");
       } else {
-        this.error="Sign Error, Please Try Again"
+        this.error="Sign In Error, Please Try Again"
       }
     })
   }

@@ -153,8 +153,6 @@ peer:any;
     .subscribe((joinMessage:any) => {
       setTimeout(()=>{
         console.log(joinMessage)
-        console.log(this.groupid);
-        console.log(joinMessage.groupid)
         if(joinMessage.user != this.currentuserinfo[0].username){
           if(joinMessage.groupid === this.groupid){
             this.groupJoinToastActivate(joinMessage)

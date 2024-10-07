@@ -147,13 +147,23 @@ module.exports = {
         } 
     },
 
+    //This function deletes a group, it removes users associations to it and then deletes the group and the channels
     deleteGroup: async function(req, res, client, dbName) {
 
         try{
-            await client.connect();
-            console.log("mongo add channel");
+            console.log("mongo delete group");
             let db = client.db(dbName);
+            //Remove any users attached to deleted group
+            await db.collection("Users").updateMany(
+                { groups: String(req.body.groupID) },  
+                { $pull: { groups: String(req.body.groupID) } } 
+              )
+            //Remove Chats
+            await db.collection("Chats").deleteMany(
+                { "message.groupID": String(req.body.groupID)}
+              )
 
+            //Delete Group
             await db.collection(collectionName).deleteOne({id: Number(req.body.groupID)})
             res.send({"deleteGroup":true});
 

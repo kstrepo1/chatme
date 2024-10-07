@@ -23,11 +23,11 @@ export class GroupService {
   }
 
   leaveGroup(searchUserID:any, groupID:any){
-    return this.http.post<any>('http://localhost:3001/api/leaveGroup', {searchUserID: searchUserID, groupID: groupID })
+    return this.http.put<any>('http://localhost:3001/api/leaveGroup', {searchUserID: searchUserID, groupID: groupID })
   }
 
   deleteGroup(searchUserID:any, groupID:any){
-    return this.http.post<any>('http://localhost:3001/api/deleteGroup', {searchUserID: searchUserID, groupID: groupID })
+    return this.http.put<any>('http://localhost:3001/api/deleteGroup', {searchUserID: searchUserID, groupID: groupID })
   }
 
   addChannel(searchUserID:any, groupID:any, channels:string){
