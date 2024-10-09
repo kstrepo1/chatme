@@ -6,7 +6,7 @@
     <button type="button" class="btn btn-info btn-sm" (click)="joinGroup()">Join</button> &nbsp;
 } 
 @if(!currentUserJoined && approvaltoJoin){
-    <button type="button" class="btn btn-info btn-sm" (click)="requestToJoinGroup()" >Request Approval to Join</button> &nbsp;
+    <button type="button" class="btn btn-info btn-sm" (click)="requestToJoinGroup()" id="requestApprovalToJoin" >Request Approval to Join</button> &nbsp;
 } 
 
     @if(!options){
@@ -44,8 +44,9 @@
 
         @if(canaddchanel){
             @if(!addingChannel){
-                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="addChanel(0)">Add New Channel</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" (click)="addChanel(0)" required>Add New Channel</button>
             } @else {
+                {{channelError}}
                 <input type="text" id="newchannel" name="newchannel" placeholder="New Channel Name" [(ngModel)]="newChannelName">
                 <button type="button" class="btn btn-outline-secondary btn-sm" (click)="addChanel(newChannelName)">Add</button>
             }

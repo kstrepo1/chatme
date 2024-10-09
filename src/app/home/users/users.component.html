@@ -12,7 +12,7 @@
     <br>
     <div>
     @if(!addUserActive){
-        <button type="button" class="btn btn-outline-primary" (click)="addNewUserToggle()">Add New</button>
+        <button type="button" class="btn btn-outline-primary" (click)="addNewUserToggle()" id="addNewUserButton">Add New</button>
     } @else{
         <b>Add New User</b><br><br>
         <form>
@@ -22,10 +22,10 @@
               </div>
             <div class="mb-3">
               <label for="addEmail" class="form-label">Email address</label>
-              <input type="email" class="form-control" id="addEmail" aria-describedby="emailHelp" [(ngModel)]="newUserEmail" name="newUserEmail">
+              <input type="email" class="form-control" id="newUserEmail" aria-describedby="emailHelp" [(ngModel)]="newUserEmail" name="newUserEmail">
               <div id="emailHelp" class="form-text">We'll try to not share your email with anyone else.</div>
             </div>
-            <button type="submit" class="btn btn-primary" (click)="addNewUser()">Create</button>
+            <button type="submit" class="btn btn-primary" (click)="addNewUser()" id="createNewUserButton">Create</button>
           </form>
     }
     </div>

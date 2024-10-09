@@ -13,7 +13,7 @@ const groupSeedData = [
 
 
 module.exports = {
-//Todo User auth?
+//Returns a list of groups and their relevant data
     groupList: async function(req, res, client, dbName) {
         try{
             await client.connect();
@@ -27,6 +27,8 @@ module.exports = {
         } 
 
     },
+
+    //Returns stored messages for display
     getMessages: async function(req, res, client, dbName) {
         try{
             await client.connect();
@@ -42,7 +44,7 @@ module.exports = {
 
     },
 
-
+// Adds a new group into the database
     addNewGroup: async function(req, res, client, dbName) {
         try{
             await client.connect();
@@ -51,7 +53,7 @@ module.exports = {
             let groups = await db.collection(collectionName).find({}).toArray()
             let newGroup = {"groupname": req.body.groupname, "id": groups.length, "channels":req.body.channels, "groupAdminAccess": req.body.groupAdminAccess, "createdby": req.body.createdby}
             await db.collection(collectionName).insertOne(newGroup);
-            res.send({successGroupAdd:true});
+            res.send({successGroupAdd:true, groupData: newGroup});
         } catch (error){
             console.error(error);
             res.status(500);
@@ -59,6 +61,7 @@ module.exports = {
 
     },
 
+    //This function records a request for approval to join
     requestApprovalToJoin: async function(req, res, client, dbName) {
         try{
             console.log("mongo Approval to join");
@@ -72,6 +75,7 @@ module.exports = {
         } 
     },
 
+    //This function returns a list of users awaiting approval to join a group
     getApprovals: async function(req, res, client, dbName) {
         try{
             console.log("mongo get approvals to join groups");
@@ -84,6 +88,7 @@ module.exports = {
         } 
     },
 
+    //This function processes a declined request to join a group
     declineApproval: async function (req, res, client, dbName, approvalID){
         try{
             console.log("Mongo Decline Approval");
@@ -99,7 +104,7 @@ module.exports = {
     },
 
 
-
+//This function allows a specified user to join a group
     joinGroup: async function(req, res, client, dbName) {
 
         try{
@@ -117,6 +122,7 @@ module.exports = {
         } 
     },
 
+    //This function allows a user to leave a group
     leaveGroup: async function(req, res, client, dbName) {
 
         try{
@@ -131,6 +137,7 @@ module.exports = {
         } 
     },
 
+    //This function adds a channel to a group
     addChannel: async function(req, res, client, dbName) {
 
         try{
@@ -190,7 +197,7 @@ module.exports = {
 
 
 
-
+//This function seeds group data
     seed: async function(client, dbName) {
         try{
             await client.connect();
@@ -204,6 +211,7 @@ module.exports = {
 
     },
 
+    //This function processes a file upload
     fileSend: async function (req, res, next){
         const file = req.file;
         if (!file){
@@ -213,7 +221,7 @@ module.exports = {
         }
         res.send(file)
     },
-
+//This function returns an image from storage
     getImage: async function(req,res, next){
         var options = {
             root: path.join(__dirname, '../uploads'),

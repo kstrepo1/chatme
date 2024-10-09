@@ -48,7 +48,8 @@ export class GroupComponent {
   messagecontent:any = "";
   fileUpload:any;
   avatar:any;
-peer:any;
+  peer:any;
+  channelError:any;
 
 
 
@@ -181,13 +182,19 @@ peer:any;
   addChanel(name:any){
 
     if(this.addingChannel){
-      this.group.addChannel(this.currentuserinfo, this.groupid, name).subscribe(data => {
-        if(data.ChannelSuccessAdd){
-          this.addingChannel = false;
-          this.groupChannels.push(name);
-          this.newChannelName = "";
-        }
-      });
+      console.log(name)
+      if(name=="" || name == undefined){
+        this.channelError = "Please Enter A Name"
+      } else {
+        this.channelError = null
+        this.group.addChannel(this.currentuserinfo, this.groupid, name).subscribe(data => {
+          if(data.ChannelSuccessAdd){
+            this.addingChannel = false;
+            this.groupChannels.push(name);
+            this.newChannelName = "";
+          }
+        });
+      }
 
     } else {
       this.addingChannel = true;

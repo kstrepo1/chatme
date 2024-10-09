@@ -27,6 +27,7 @@ export class UserComponent {
   deleteuseravailable:boolean = false;
   usergroups:any;
   uploadedFile:Boolean = false;
+  deleteUserActive:Boolean = false;
 
   //Constructor uses activated route to determine which user to load. 
   constructor(
@@ -115,7 +116,17 @@ export class UserComponent {
     })
   }
 
-
+  deleteUser(userID:any){
+    console.log(this.userinfo._id)
+    if(!this.deleteUserActive){
+      this.deleteUserActive = true
+    } else {
+      this.UserService.deleteUser(userID).subscribe( (data)=>{
+        console.log(data);
+        this.router.navigate(['users'])
+      })
+    }
+  }
 }
     
 

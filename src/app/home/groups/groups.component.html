@@ -1,21 +1,21 @@
 
 
-@for (group of grouplist; track group.groupname){
-    <div id="group">
+@for (group of grouplist; track group.id){
+    <div id="group" class="{{group.groupname}}">
         <h2>{{group.groupname}}</h2>
         <div id="channels">Channels: {{group.channels}}</div>
         <br>
         <button type="button" class="btn btn-primary" (click)="groupView(group.id)">View</button>
         &nbsp;
-        @if(!group.joined && isSuperAdmin){
+        <!-- @if(!group.joined && isSuperAdmin){
             <button type="button" class="btn btn-info btn-sm">Join</button>
-        }
+        } -->
     </div>   
 }
 @if(canCreateGroup){
     <div id="createNewGroup">
         <div >
-            <button type="button" class="btn btn-success btn-sm" (click)="createNewGroup();">Create New Group</button>
+            <button type="button" class="btn btn-success btn-sm" id="createNewGroupButton" (click)="createNewGroup();">Create New Group</button>
         </div>
     </div>
 }

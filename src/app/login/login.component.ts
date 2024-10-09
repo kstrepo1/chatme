@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
-  emailaddress:string ="super@super.com";
+  emailaddress:string ="";
   password:string= "";
   error:string="";
 

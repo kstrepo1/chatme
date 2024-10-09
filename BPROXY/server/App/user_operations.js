@@ -96,13 +96,14 @@ const seedData = [
 
 
 module.exports = {
+    //Gets session info and returns it to frontend. 
     sessionInfo: async function(req, res, client, dbName) {
         let sessionId = req.body.sessionId;
         let results = await sessionCheck(sessionId, client, dbName)
 
         res.send(results);
     },
-
+//checks username and password.
     signInto: async function(req, res, client, dbName) {
 
         try{
@@ -134,6 +135,7 @@ module.exports = {
 
     },
 
+    //Logout function - deletes session from database
     sessionLogout: async function(req, res, client, dbName, sessionId) {
         console.log(sessionId + " sessionLogout attempt")
         await client.connect();
@@ -142,6 +144,15 @@ module.exports = {
         res.send(sessionSearch);
     },
 
+    //deletes a user from the database
+    deleteUser: async function(req, res, client, dbName, userID) {
+        console.log("Delete User")
+        let db = client.db(dbName);
+        let sessionSearch = await db.collection(collectionName).deleteOne({"_id": new ObjectId(userID)});
+        res.send(sessionSearch);
+    },
+
+    //Promotes a user
     promoteUser: async function(req, res, client, dbName) {
         await client.connect();
         console.log("mongo promote user ");
@@ -152,6 +163,7 @@ module.exports = {
         res.send(result);
     },
 
+    //Seeds data 
     seed: async function (client, dbName){
         await client.connect();
         console.log("mongo seeded");
@@ -180,7 +192,6 @@ module.exports = {
     },
 
     //Get Userlist
-    //Todo User auth?
     userList: async function(req, res, client, dbName) {
         try{
             await client.connect();
@@ -212,6 +223,7 @@ module.exports = {
         }
     },
 
+    //Updates a users Data
     updateUser: async function(req, res, client, dbName) {
 
         let updatedUserDetails;
@@ -238,15 +250,7 @@ module.exports = {
         res.send(updatedUserDetails);
     },
 
-    delete: function(req, res, client) {
-    let db = client.db("dbName");
-    let queryJSON = req.body;
-    queryJSON._id = new ObjectId(req.params_id);
-    db.collection("colName").deleteMany(queryJSON);
-    console.log("Removed the documents with: ", queryJSON);
-    res.send(queryJSON);
-    },
-
+    //Updates an avatar image
     updateAvatarImage: async function (req,res,client, dbName){
         console.log(req.body)
         let updateAvatar;

@@ -39,6 +39,11 @@ export class UserService {
     return this.http.delete(`http://localhost:3001/api/sessionlogout/${sessionId}`)
   }
 
+  
+  deleteUser(userID:any){
+    return this.http.delete(`http://localhost:3001/api/deleteUser/${userID}`)
+  }
+
   //This route Applies new roles to a user, actioned by the superuser. 
   promoteUser(currentUserID:any, promoteUserID:any, typeOfPromotion:any){
     return this.http.post<any>('http://localhost:3001/api/promoteUser', {currentUserID:currentUserID, promoteUserID: promoteUserID, typeOfPromotion:typeOfPromotion})

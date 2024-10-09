@@ -2,32 +2,36 @@
     <h1>User Info</h1><br>
     <h4>Name: {{userinfo.username}}</h4><br>
     <h5>Email: {{userinfo.email}}</h5><br>
-    <h5>Roles:</h5>
-    {{userinfo.roles}} <br><br>
+    <h5 >Roles:</h5>
+    <div id="roles">{{userinfo.roles}}</div>
+     <br><br>
 
 
 
 
 
-    <h5>Groups: </h5>
+    <h5 id="groups">Groups: </h5>
     @for (group of usergroups; track group){
         {{group}}<br>
     }
     <br>
 
     @if(promoteusergroupadmin){
-        <button type="button" class="btn btn-success" (click)="promoteToGroupAdmin()">Promote to Group Admin</button>
+        <button type="button" class="btn btn-success" (click)="promoteToGroupAdmin()" id="promoteToGroupAdmin">Promote to Group Admin</button>
         <br><br>
     }
 
 
     @if(promoteusersuperadmin){
-        <button type="button" class="btn btn-warning" (click)="promoteToSuperAdmin()">Promote to SuperAdmin</button>
+        <button type="button" class="btn btn-warning" (click)="promoteToSuperAdmin()" id="promoteToSuperAdmin">Promote to SuperAdmin</button>
         <br><br>
     }
 
     @if(deleteuseravailable){
-        <button type="button" class="btn btn-outline-danger">Delete Account</button>
+        @if(deleteUserActive){
+            Click again to confirm user Deletion.<br><br>
+        }
+        <button type="button" class="btn btn-outline-danger" (click)="deleteUser(userinfo._id)" id="deleteAccount">Delete Account</button>
         <br><br>
     }
 

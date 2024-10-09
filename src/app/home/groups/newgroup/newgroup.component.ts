@@ -56,7 +56,7 @@ export class NewgroupComponent {
     this.group.newGroup(this.groupName, this.newchannels, this.currentUserID, this.currentUserID).subscribe( (data)=>{
       console.log(data);
       if(data.successGroupAdd){
-        this.router.navigate(['groups']);
+        this.router.navigate(['group/'+data.groupData.id]);
       }
     })
   }

@@ -54,9 +54,9 @@ app.get('/', (req, res)=> res.send('Hello World'));
 app.post('/test', (req,res) => res.send(req.body));
 
     //Data Seeding 
-        //users.seed(client, dbName)
+        users.seed(client, dbName)
 
-        //await groups.seed(client, dbName)
+        groups.seed(client, dbName)
     
     //
     
@@ -69,7 +69,10 @@ app.post('/api/promoteUser', (req, res) => users.promoteUser(req, res, client, d
 app.delete('/api/sessionlogout/:id', (req, res) => { const sessionId = req.params.id;
     users.sessionLogout(req, res, client, dbName, sessionId)});
 app.put('/api/updateUser', (req,res)=> users.updateUser(req,res,client,dbName))
-app.put('/api/updateAvatarImage', (req,res)=> users.updateAvatarImage(req,res,client,dbName))
+app.put('/api/updateAvatarImage', (req,res)=> users.updateAvatarImage(req,res,client,dbName));
+app.delete('/api/deleteUser/:id', (req, res) => { const userID = req.params.id;
+  users.deleteUser(req, res, client, dbName, userID)});
+
 
 
 //Sign In

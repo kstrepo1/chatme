@@ -35,26 +35,26 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto" *ngIf="validuser==true;" id="signedinOptions">
       <li class="nav-item">
-        <a (click)="groups()" class="nav-link text-white" aria-current="page">
+        <a (click)="groups()" class="nav-link text-white" aria-current="page" id="nav-Home">
           <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"/></svg>
           Home
         </a>
       </li>
       <li>
-        <a (click)="groups()" class="nav-link text-white">
+        <a (click)="groups()" class="nav-link text-white" id="nav-Groups">
           <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
           Groups
         </a>
       </li>
       <li>
-        <a (click)="users()" class="nav-link text-white">
+        <a (click)="users()" class="nav-link text-white" id="nav-Users">
           <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
           Users
         </a>
       </li>
       @if(canSeeRequests){
         <li>
-          <a (click)="requests()" class="nav-link text-white">
+          <a (click)="requests()" class="nav-link text-white" id="nav-Requests">
             <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#approval-icon"/></svg>
             Requests
           </a>
@@ -64,7 +64,7 @@
     <hr *ngIf="validuser==true;" id="signedinOptions">
 
     <div class="dropdown" *ngIf="validuser==true;" id="signedinOptions">
-      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true">
+      <a id="optionsList" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true">
 
         @if(avatar){
           <img src="http://localhost:3001/{{avatar}}" alt="" width="32" height="32" class="rounded-circle me-2">
@@ -77,10 +77,10 @@
 
         <strong>{{username}}</strong>
       </a>
-      <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" id="nav-Account-Actions">
         <li><a class="dropdown-item" href="/profile">Profile</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" (click)="logout()">Sign out</a></li>
+        <li><a class="dropdown-item" (click)="logout()" id="signOut">Sign out</a></li>
       </ul>
     </div>
   </div>
