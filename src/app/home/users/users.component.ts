@@ -25,6 +25,7 @@ export class UsersComponent {
   newUserEmail:any;
   newUserUsername:any;
   credcheck:any;
+  addUsererror:any;
 
   ngOnInit(){
     if(isPlatformBrowser(this.platformID)){
@@ -68,16 +69,21 @@ export class UsersComponent {
   async addNewUser(){
     this.UserService.addNewUser({"email": this.newUserEmail, "username": this.newUserUsername}).subscribe ( (data)=>{
       console.log(data);
-      try{
-        this.userlist.push(data[0]);
-        this.addUserActive = false;
-        this.newUserEmail = "";
-        this.newUserUsername = "";
+      if(data[0]){
+        try{
+          this.userlist.push(data[0]);
+          this.addUserActive = false;
+          this.newUserEmail = "";
+          this.newUserUsername = "";
+  
+        }
+        catch{
+          console.log('add new user error')
+        }
+      } else {
+        this.addUsererror = "Duplicate or Invalid Email, Please Try Again"
+      }
 
-      }
-      catch{
-        console.log('add new user error')
-      }
     })
   }
 

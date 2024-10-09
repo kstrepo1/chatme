@@ -54,9 +54,9 @@ app.get('/', (req, res)=> res.send('Hello World'));
 app.post('/test', (req,res) => res.send(req.body));
 
     //Data Seeding 
-        users.seed(client, dbName)
+        // users.seed(client, dbName)
 
-        groups.seed(client, dbName)
+        // groups.seed(client, dbName)
     
     //
     

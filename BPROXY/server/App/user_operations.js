@@ -94,6 +94,11 @@ const seedData = [
     } 
 }
 
+function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+
 
 module.exports = {
     //Gets session info and returns it to frontend. 
@@ -174,21 +179,40 @@ module.exports = {
 
     //Insert New User
     insert: async function(req, res, client, dbName) {
-    await client.connect();
-    console.log("mongo newuser");
-    let db = client.db(dbName); 
-    let doc = req.body.userDetails
-    //const hash = await bcrypt.hash(##INSERTPASSWORD##, SALT_ROUNDS);
-    let newUser =    
-        { username: doc.username,
-        email: doc.email,
-        password: "$2b$10$mGyGqqVywqgpwCWLovMzwu8v8OM0IEAcMfIaUcMtYPGMOU6Ba8U0O",
-        roles: [ 'ChatUser' ],
-        groups: []}
-    await db.collection(collectionName).insertOne(newUser);
-    let newuserdetails = await db.collection(collectionName).find({"email": doc.email}).toArray();
-    console.log("Inserted the below user into collection");
-    res.send(dataCleanse(newuserdetails));
+        try{
+            await client.connect();
+            console.log("mongo newuser");
+            let db = client.db(dbName); 
+            let doc = req.body.userDetails
+            //const hash = await bcrypt.hash(##INSERTPASSWORD##, SALT_ROUNDS);
+            let newUser =    
+                { username: doc.username,
+                email: doc.email,
+                password: "$2b$10$mGyGqqVywqgpwCWLovMzwu8v8OM0IEAcMfIaUcMtYPGMOU6Ba8U0O",
+                roles: [ 'ChatUser' ],
+                groups: []}
+                let find = await db.collection(collectionName).find({"email": doc.email}).toArray()
+                let newuserdetails
+                console.log(find)
+                console.log(find[0])
+            if(find[0]==undefined && validateEmail(doc.email)){
+                console.log("Inserted the below user into collection");
+                console.log("Added new")
+                await db.collection(collectionName).insertOne(newUser);
+                let inserted = await db.collection(collectionName).find({"email": doc.email}).toArray()
+                 console.log(inserted)
+                 newuserdetails = dataCleanse(inserted)
+            } else {
+                newuserdetails = false
+            }
+            //res.send(find);
+            
+            res.send(newuserdetails);
+        } catch (err){
+            console.error(err)
+            res.send(500);
+        }
+
     },
 
     //Get Userlist
